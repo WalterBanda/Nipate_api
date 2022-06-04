@@ -1,0 +1,9 @@
+gunicorn
+Django==4.0.4
+django-rest-framework
+django-cors-headers==3.12.0
+djoser
+psycopg2-binary
+python-dateutil
+datetime
+requests
