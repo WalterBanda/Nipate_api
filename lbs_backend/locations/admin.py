@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import (CountyModel, TownsModel)
 
-# Register your models here.
+
+admin.site.register(CountyModel)
+admin.site.register(TownsModel)

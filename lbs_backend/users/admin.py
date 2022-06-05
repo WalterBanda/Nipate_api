@@ -6,7 +6,7 @@ from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.core.exceptions import ValidationError
 
 from users.models import (
-    CustomUser, Gender, WorkingDays
+    CustomUser, Gender
 )
 
 class UserCreationForm(forms.ModelForm):
@@ -80,11 +80,6 @@ class UserAdmin(BaseUserAdmin):
     filter_horizontal = ()
 
 
-class WorkingDaysAdmin(admin.ModelAdmin):
-    list_display = [
-        "id", "days"
-    ]
-
 class GenderAdmin(admin.ModelAdmin):
     list_display = [
         "id", "name"
@@ -95,4 +90,3 @@ class GenderAdmin(admin.ModelAdmin):
 admin.site.register(CustomUser, UserAdmin)
 admin.site.unregister(Group)
 admin.site.register(Gender, GenderAdmin)
-admin.site.register(WorkingDays, WorkingDaysAdmin)
