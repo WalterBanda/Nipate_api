@@ -3,11 +3,18 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-DEBUG = int(os.environ.get("DEBUG", default=0))
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161:8090', 'http://0.0.0.0:8090']
+=======
+SECRET_KEY = os.environ.get("SECRET_KEY", "foo")
+DEBUG = int(os.environ.get("DEBUG", default=1))
+ALLOWED_HOSTS = ['*']
+# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161:8090']
+>>>>>>> 77feccf8f2279b3c63d2d7e422cb7e14202bc3bf
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -17,6 +24,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework.authtoken',
+    'drf_yasg',
     'corsheaders',
     'djoser',
     'users',
@@ -30,9 +38,17 @@ REST_FRAMEWORK = {
 }
 
 DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": "/password/reset/confirm/{uid}/{token}",
+    "PASSWORD_RESET_CONFIRM_URL": False,
+    "USERNAME_RESET_CONFIRM_URL": False,
     "SEND_ACTIVATION_EMAIL": False,
-    "SERIALIZERS": {},
+    "SERIALIZERS": {
+        'user_create': 'djoser.serializers.UserCreateSerializer',
+        'user_delete': 'djoser.serializers.UserDeleteSerializer',
+        'user': 'djoser.serializers.UserSerializer',
+        'current_user': 'djoser.serializers.UserSerializer',
+        'token': 'djoser.serializers.TokenSerializer',
+        'token_create': 'djoser.serializers.TokenCreateSerializer',
+    },
 }
 
 MIDDLEWARE = [
