@@ -12,9 +12,8 @@ class Gender(models.Model):
     class Meta:
         verbose_name = 'Gender'
         verbose_name_plural = 'Gender'
-
     def __str__(self):
-        return str(self.id)
+        return str(self.name)
 
 
 # ----> User Table 

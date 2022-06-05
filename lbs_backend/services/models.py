@@ -15,7 +15,7 @@ class ProductCategory(models.Model):
         return self.Name
 
 class Product(models.Model):
-    CategoryID = models.ForeignKey(ProductCategory, on_delete=models.PROTECT)
+    CategoryID = models.ForeignKey(ProductCategory, on_delete=models.PROTECT, related_name="category")
     Name = models.CharField(max_length=100)
 
     class Meta:
@@ -51,11 +51,12 @@ class ServiceProvider(models.Model):
         ('10+', '10+'),
         ('16+', '16+'),
     ]
-    UserID = models.OneToOneField(UserModel, on_delete=models.CASCADE)
-    ProductID = models.ForeignKey(Product, on_delete=models.PROTECT)
-    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True)
-    GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT,null=True,blank=True)
+    UserID = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name="UserID")
+    ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="ProductID")
+    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True, related_name="LocationID")
+    GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT,null=True,blank=True, related_name="GenderID")
     AgeBracket = models.CharField(max_length=9, choices=AGE, null=True, blank=True)
+    WorkingDays = models.ManyToManyField(WorkingDays, related_name="working_days")
     TimeStamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
