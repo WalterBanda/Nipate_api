@@ -7,7 +7,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161:8090']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161:8090', 'http://0.0.0.0:8090']
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
