@@ -2,15 +2,15 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from locations.models import (TownsModel)
 from users.models import Gender
-UserModel = get_user_model()
 
+UserModel = get_user_model()
 
 class ProductCategory(models.Model):
     Name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "ProductCategories"
-        verbose_name_plural = "ProductCategories"
+        verbose_name = "Product Categories"
+        verbose_name_plural = "Product Categories"
     def __str__(self):
         return self.Name
 
@@ -65,3 +65,16 @@ class ServiceProvider(models.Model):
     
     def __str__(self):
         return "%s || %s" % (str(self.id), str(self.UserID))
+
+
+class ServiceRequest(models.Model):
+    ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="product")
+    UserID = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="user")
+    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True, related_name="location")
+    Timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Requested Services"
+        verbose_name_plural = "Requested Services"
+    def __str__(self):
+        return "%s || %s" % (str(self.ProductID), str(self.UserID))

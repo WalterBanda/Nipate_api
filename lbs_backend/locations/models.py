@@ -13,7 +13,7 @@ class CountyModel(models.Model):
 
 class TownsModel(models.Model):
     Name = models.CharField(max_length=50)
-
+    County = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
     class Meta:
         verbose_name = "Towns"
         verbose_name_plural = "Towns"
