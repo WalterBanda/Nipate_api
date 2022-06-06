@@ -17,22 +17,20 @@ class ServiceProviderView(APIView):
     @swagger_auto_schema(operation_description="Endpoint for Providers get response", manual_parameters=[ID, ProductID], responses={200: ServiceProviderSerializer(many=True)})
     def get(self, request):
         try:
+            data = request.query_parms
             try:
-                dataID = request.query_parms['ProviderID']
-                ProductID = request.query_parms['ProductID']
                 try:
-                    provider = ServiceProvider.objects.filter(id=dataID, ProductID_id=ProductID)
+                    provider = ServiceProvider.objects.filter(id=data["dataID"], ProductID_id=data["ProductID"])
                     serializer = ServiceProviderSerializer(provider, many=True)
                     return Response(serializer.data, status=status.HTTP_200_OK)
                 except ServiceProvider.DoesNotExist:
                     pass
             except:
-                ProductID = request.query_parms['ProductID']
-                try:
-                    provider = ServiceProvider.objects.filter(ProductID_id=ProductID)
+                if data["ProductID"]:
+                    provider = ServiceProvider.objects.filter(ProductID_id=data["ProductID"])
                     serializer = ServiceProviderSerializer(provider, many=True)
                     return Response(serializer.data, status=status.HTTP_200_OK)
-                except ServiceProvider.DoesNotExist:
+                else:
                     pass
         except:
             providers = ServiceProvider.objects.all()
@@ -54,19 +52,16 @@ class ServiceProviderView(APIView):
     def post(self, request):
         try:
             data = request.data
-            provider = ServiceProvider(UserID=data["UserID"], ProductID=data["ProductID"])
-            try:
-                provider.LocationID = data["LocationID"]
-            except:
-                pass
-            try:
-                provider.GenderID = data["GenderID"]
-            except:
-                pass
-            try:
+            provider = ServiceProvider(UserID_id=data["UserID"], ProductID_id=data["ProductID"])
+            if data["LocationID"] is not None:
+                provider.LocationID_id = data["LocationID"]
+
+            if data["GenderID"] is not None:
+                provider.GenderID_id = data["GenderID"]
+
+            if data["AgeBracket"] is not None:
                 provider.AgeBracket = data["AgeBracket"]
-            except:
-                pass
+
             provider.save()
             serializer = ServiceProviderSerializer(provider, many=False)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -89,19 +84,45 @@ class RequestServiceView(APIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             except:
                 pass
-            try:
+            if data["UserID"] is not None:
+                requests = ServiceRequest.objects.filter(UserID_id=data["UserID"])
+                serializer = RequestedServiceSerializer(requests, many=True)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+
+            if data["LocationID"] is not None:
                 requests = ServiceRequest.objects.filter(LocationID_id=data["LocationID"])
                 serializer = RequestedServiceSerializer(requests, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            except:
-                pass
-            try:
+
+            if data["ProductID"] is not None:
                 requests = ServiceRequest.objects.filter(ProductID_id=data["ProductID"])
                 serializer = RequestedServiceSerializer(requests, many=True)
                 return Response(serializer.data, status=status.HTTP_200_OK)
-            except:
-                pass
+
         except:
             requests = ServiceRequest.objects.all()
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+    @swagger_auto_schema(
+        request_body=openapi.Schema(description="Create Service Provider Account", type=openapi.TYPE_OBJECT,required=['UserID', 'ProductID'],
+            properties={
+                'UserID': openapi.Schema(description="UserID data", type=openapi.TYPE_INTEGER),
+                'ProductID': openapi.Schema(description="ProductID data", type=openapi.TYPE_INTEGER),
+                'LocationID': openapi.Schema(description="LocationID data(optional)", type=openapi.TYPE_INTEGER),
+            }
+        ),responses={201: RequestedServiceSerializer(many=False)}
+    )  
+    def post(self, request):
+        data = request.data
+        try:
+            requests = ServiceRequest(
+                ProductID_id=data["ProductID"], UserID_id=["UserID"]
+            )
+            if data["LocationID"] is not None:
+                requests.LocationID_id = data["LocationID"]
+            requests.save()
+            serializer = RequestedServiceSerializer(requests, many=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
