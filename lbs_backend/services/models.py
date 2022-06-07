@@ -71,6 +71,7 @@ class ServiceRequest(models.Model):
     ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="product")
     UserID = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="user")
     LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True, related_name="location")
+    RequestText = models.TextField(null=True, blank=True)
     Timestamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -78,3 +79,15 @@ class ServiceRequest(models.Model):
         verbose_name_plural = "Requested Services"
     def __str__(self):
         return "%s || %s" % (str(self.ProductID), str(self.UserID))
+
+class RequestResponse(models.Model):
+    RequestID = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE, related_name="request")
+    ProviderID = models.ForeignKey(ServiceProvider, on_delete=models.CASCADE, related_name="provider")
+    ResponseText = models.TextField(null=True, blank=True)
+    Timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Service Request Responses"
+        verbose_name_plural = "Service Request Responses"
+    def __str__(self):
+        return "%s || %s" % (str(self.id), str(self.RequestID))

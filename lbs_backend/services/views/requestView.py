@@ -110,6 +110,7 @@ class RequestServiceView(APIView):
                 'UserID': openapi.Schema(description="UserID data", type=openapi.TYPE_INTEGER),
                 'ProductID': openapi.Schema(description="ProductID data", type=openapi.TYPE_INTEGER),
                 'LocationID': openapi.Schema(description="LocationID data(optional)", type=openapi.TYPE_INTEGER),
+                'RequestText': openapi.Schema(description="RequestText text(optional)", type=openapi.TYPE_STRING),
             }
         ),responses={201: RequestedServiceSerializer(many=False)}
     )  
@@ -121,6 +122,8 @@ class RequestServiceView(APIView):
             )
             if data["LocationID"] is not None:
                 requests.LocationID_id = data["LocationID"]
+            if data["RequestText"] is not None:
+                requests.RequestText = data["RequestText"]
             requests.save()
             serializer = RequestedServiceSerializer(requests, many=False)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
