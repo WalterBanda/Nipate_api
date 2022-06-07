@@ -7,5 +7,5 @@ urlpatterns = [
     path('service-request', requestView.RequestServiceView.as_view()),
 
     # Response Views
-    path('serive-response', responseView.RequestedResponseView.as_view()),
+    path('service-response', responseView.RequestedResponseView.as_view()),
 ]
