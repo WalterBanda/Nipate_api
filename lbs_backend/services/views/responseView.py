@@ -42,3 +42,26 @@ class RequestedResponseView(APIView):
             response = RequestResponse.objects.all()
             serializer = RequestResponseSerializer(response, many=True)
             return Response(serializer.data, status.HTTP_200_OK)
+    
+    @swagger_auto_schema(
+        request_body=openapi.Schema(description="Create Service request Response", type=openapi.TYPE_OBJECT,required=['RequestID', 'ProviderID'],
+            properties={
+                'RequestID': openapi.Schema(description="UserID", type=openapi.TYPE_INTEGER),
+                'ProviderID': openapi.Schema(description="ProductID", type=openapi.TYPE_INTEGER),
+                'ResponseText': openapi.Schema(description="ResponseText (optional)", type=openapi.TYPE_STRING),
+            }
+        ),responses={201: RequestResponseSerializer(many=False)}
+    )
+    def post(self, request):
+        data = request.data
+        try:
+            if data["RequestID"] and data["ProviderID"] is not None:
+                response = RequestResponse(RequestID_id=data["RequestID"], ProviderID_id=data["ProviderID"])
+            else:
+                return Response(status=status.HTTP_400_BAD_REQUEST)
+            if data["ResponseText"] is not None:
+                response.ResponseText = data["ResponseText"]
+            serializer = RequestResponseSerializer(response, many=False)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
