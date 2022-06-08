@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import requestView, responseView
+from .views import requestView, responseView, advertView
 
 urlpatterns = [
     # Request Views
@@ -8,4 +8,7 @@ urlpatterns = [
 
     # Response Views
     path('service-response', responseView.RequestedResponseView.as_view()),
+
+    # Adverts Views
+    path('advert', advertView.AdvertView.as_view())
 ]

@@ -91,3 +91,22 @@ class RequestResponse(models.Model):
         verbose_name_plural = "Service Request Responses"
     def __str__(self):
         return "%s || %s" % (str(self.id), str(self.RequestID))
+
+
+class Advertisement(models.Model):
+    UserID = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name="user_advert")
+    ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, null=True, blank=True, related_name="product_advert")
+    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True, related_name="location_advert")
+    GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True, related_name="gender_advert")
+    ADText = models.TextField(null=True, blank=True)
+    Timestamp = models.DateTimeField(auto_now_add=True)
+    ExpiryDate = models.DateField(null=True, blank=True)
+    NoOfMessages = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Advertisements"
+        verbose_name_plural = "Advertisements"
+
+    def __str__(self):
+        return "%s || %s || %s" % (str(self.id), str(self.UserID), str(self.ProductID))
+    

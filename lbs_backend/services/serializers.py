@@ -1,10 +1,11 @@
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import get_user_model
 from .models import (
-    WorkingDays, ProductCategory, Product, ServiceProvider, ServiceRequest, RequestResponse
+    WorkingDays, ProductCategory, Product, ServiceProvider, ServiceRequest, RequestResponse, Advertisement
 )
 from users.serializers import UserModelSerializer, GenderSerializer
 from locations.serializers import TownsModelSerializer
+
 class WorkingDaySerializer(ModelSerializer):
     class Meta:
         model = WorkingDays
@@ -53,3 +54,11 @@ class RequestResponseSerializer(ModelSerializer):
     class Meta:
         model = RequestResponse
         fields = ["id", "Request", "Provider", "ResponseText","Timestamp"]
+
+class AdvertisementSerializer(ModelSerializer):
+    User = UserModelSerializer(source="UserID", read_only=True)
+    Product = ProductSerializer(source="ProductID", read_only=True)
+    Location = TownsModelSerializer(source="LocationID", read_only=True)
+    class Meta:
+        model = Advertisement
+        fields = ['id', 'User', 'Product', 'Location', 'GenderID', 'Timestamp', 'ExpiryDate']
