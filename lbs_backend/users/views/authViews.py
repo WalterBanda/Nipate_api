@@ -38,10 +38,10 @@ class MySiteAuthViews(UserViewSet):
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
     
-    @action(["get", "put", "patch", "delete"], detail=False)
+    @action(["get", "delete"], detail=False)
     def me(self, request, *args, **kwargs):
         return super().me(request, *args, **kwargs)
-    
+
     def activation(self, request, *args, **kwargs):
         return super().activation(request, *args, **kwargs)
     def resend_activation(self, request, *args, **kwargs):

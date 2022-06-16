@@ -3,9 +3,7 @@ from users.views import authViews
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register('', authViews.MySiteAuthViews)
-# router.register('', authViews.MyTokenCreateView, basename="login")
-# router.register('', authViews.MyTokenDestroyView, basename="logout")
+router.register('register', authViews.MySiteAuthViews, basename="register_user")
 
 
 urlpatterns = [
