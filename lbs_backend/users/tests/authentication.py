@@ -25,13 +25,18 @@ class UserTestCast(TestCase):
     def test_user_password(self):
         self.assertTrue(self.user_a.check_password(self.user_a_pw))
     
-    def test_token_login(self):
+    def test_token_login(self): # test login of a user
         url = reverse("login")
         data = {
             "password": self.user_a_pw,
             "MobileNumber": self.user_a.MobileNumber
         }
         response = client.post(url, data, format="json")
-        self.auth_token = response.data["auth_token"]
-        print(self.auth_token)
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.auth_token = response.data["auth_token"]
+    def test_token_logout(self):
+        url = reverse("logout")
+        print(self.auth_token)
+        response = client.post(url, headers={"Authorization": "Token " + self.auth_token}, format='json')
+        # self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        print("logout succesfully")
