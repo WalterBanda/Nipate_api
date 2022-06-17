@@ -1,36 +1,18 @@
 from rest_framework import status
 from .test_setup import TestSetup
-from users.models import Gender
-from django.contrib.auth import get_user_model
-
-User = get_user_model()
 
 class TestViews(TestSetup):
 
-    def test_user_can_register(self):
-        res = self.client.post(self.register_url, self.user_a, format="json")
+    def test_user_can_register(self): # test user registration endpoint
+        res = self.user_registratin()
         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
         self.assertEqual(1, res.data["id"])
     
-    def test_user_details_update(self):
-        gender = Gender(name="Male")
-        gender.save()
-        self.assertEqual(1, gender.id)
-        user_a = User(**self.user_a)
-        user_a.GenderID = gender
-        user_a.save()
-        self.assertEqual(1, user_a.id)
-
-    def test_user_login(self):
-        response = self.client.post(self.register_url, self.user_a, format="json")
-        login_data = {
-            "password": self.user_a["password"],
-            "MobileNumber": response.data["MobileNumber"]
-        }
-        res = self.client.post(self.login_url, login_data, format="json")
+    def test_user_login(self): # test user login and authentication header token
+        res = self.user_login()
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-    def test_user_logout(self):
+    def test_user_logout(self): # test user logout and deletion of authentication header token
         response = self.client.post(self.register_url, self.user_a, format="json")
         login_data = {
             "password": self.user_a["password"],
