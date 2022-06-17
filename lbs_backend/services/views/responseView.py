@@ -60,6 +60,7 @@ class RequestedResponseView(APIView):
                 return Response(status=status.HTTP_400_BAD_REQUEST)
             if data["ResponseText"] is not None:
                 response.ResponseText = data["ResponseText"]
+            response.save()
             serializer = RequestResponseSerializer(response, many=False)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except:
