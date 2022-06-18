@@ -17,17 +17,15 @@ schema_view = get_schema_view(
    ), public=True, permission_classes=[permissions.AllowAny],
 )
 urlpatterns = [
+   # default project urls
    path('admin/', admin.site.urls),
    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
-   
-   # Djoser authentication urls
-   # path('auth', include('djoser.urls')),
-   # path('auth', include('djoser.urls.authtoken')),
 
    #  applications urls 
    path('auth/', include('users.urls')),
    path('service/', include("services.urls")),
+   path('location/', include('locations.urls')),
 ]
 
 if bool(settings.DEBUG):

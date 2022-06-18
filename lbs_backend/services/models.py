@@ -24,12 +24,9 @@ class Product(models.Model):
 
 class WorkingDays(models.Model):
     DAYS_OF_WEEK = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
+        ('Monday', 'Monday'), ('Tuesday', 'Tuesday'),
+        ('Wednesday', 'Wednesday'), ('Thursday', 'Thursday'),
+        ('Friday', 'Friday'), ('Saturday', 'Saturday'),
         ('Sunday', 'Sunday'),
     ]
     days = models.CharField(max_length=9, choices=DAYS_OF_WEEK)
@@ -46,10 +43,8 @@ class WorkingDays(models.Model):
 class ServiceProvider(models.Model):
 
     AGE = [
-        ('18+', '18+'),
-        ('All', 'All'),
-        ('10+', '10+'),
-        ('16+', '16+'),
+        ('18+', '18+'), ('All', 'All'),
+        ('10+', '10+'), ('16+', '16+'),
     ]
     UserID = models.OneToOneField(UserModel, on_delete=models.CASCADE, related_name="UserID")
     ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="ProductID")

@@ -1,5 +1,9 @@
 from rest_framework import status
+from rest_framework.test import APIClient
 from .test_setup import TestSetup
+
+
+client = APIClient()
 
 class TestViews(TestSetup):
 
@@ -13,12 +17,8 @@ class TestViews(TestSetup):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
     def test_user_logout(self): # test user logout and deletion of authentication header token
-        response = self.client.post(self.register_url, self.user_a, format="json")
-        login_data = {
-            "password": self.user_a["password"],
-            "MobileNumber": response.data["MobileNumber"]
-        }
-        res = self.client.post(self.login_url, login_data, format="json")
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        auth_token = res.data["auth_token"]
-        logout_res = self.client.post(self.logout_url, header={"Authorization": "Token\1" + auth_token})
+        response = self.user_login()
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        auth_token = response.data["auth_token"]
+        self.client.credentials(HTTP_AUTHORIZATION="Token\s" + auth_token)
+        logout_res = self.client.post(self.logout_url)
