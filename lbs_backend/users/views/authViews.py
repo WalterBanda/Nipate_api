@@ -4,7 +4,6 @@ from djoser.views import (
     UserViewSet, TokenCreateView, TokenDestroyView
 )
 
-from rest_framework.exceptions import NotFound
 from rest_framework.decorators import action
 
 class MySiteAuthViews(UserViewSet):
