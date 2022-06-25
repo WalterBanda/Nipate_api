@@ -17,7 +17,7 @@ class Gender(models.Model):
 
 class CustomUser(AbstractBaseUser):
     MobileNumber = models.CharField(max_length=10, unique=True)
-    IDNumber = models.CharField(max_length=15, null=True, blank=True)
+    IDNumber = models.CharField(max_length=15, null=True, blank=True, unique=True)
     GenderID = models.ForeignKey(Gender, on_delete=models.CASCADE, null=True, blank=True)
     YearOfBirth = models.DateField(null=True, blank=True)
     FirstName = models.CharField(max_length=50, null=True, blank=True)

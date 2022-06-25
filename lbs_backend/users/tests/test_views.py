@@ -1,20 +1,20 @@
-# from rest_framework import status
-# from rest_framework.test import APIClient
-# from .test_setup import TestSetup
+from rest_framework import status
+from django.contrib.auth import get_user_model
 
 
-# client = APIClient()
+from users.tests.test_setup import TestSetup
 
-# class TestViews(TestSetup):
+User = get_user_model()
 
+class TestViews(TestSetup):
 
-#     def test_user_login(self): # test user login and authentication header token
-#         res = self.client.post(self.register_url, data=self.user_a)
-#         self.assertEqual(res.status_code, status.HTTP_201_CREATED)
-#         self.assertEqual(1, res.data["id"])
-#         user = {**self.user_a}
-#         user.pop("IDNumber")
-#         user.pop("FirstName")
-#         login = self.client.post(self.login_url, data=user)
-#         self.assertEqual(login.status_code, status.HTTP_200_OK)
-#         self.assertIsNotNone(login.data)
+    def test_user_registration_with_endpoints(self):
+        user = self.client.post(self.register_url, data={**self.user_a})
+        self.assertEqual(201, user.status_code)
+        self.assertEqual(1, user.data["id"])
+    
+    def test_user_registration_with_wrong_values(self):
+        user_data = {**self.user_a}
+        user_data.pop("IDNumber")
+        user = self.client.post(self.register_url, data=user_data)
+        self.assertEqual(400, user.status_code)

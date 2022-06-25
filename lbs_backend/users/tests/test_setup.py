@@ -5,7 +5,7 @@ from django.urls import reverse
 class TestSetup(APITestCase):
     
     def setUp(self):
-        self.register_url = "http://127.0.0.1:8000/auth/register/"
+        self.register_url = reverse("user")
         self.login_url = reverse("login")
         self.logout_url = reverse("logout")
 
