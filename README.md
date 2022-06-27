@@ -1,6 +1,6 @@
 # LBSAPI's
 
-### Project Development Setup
+### Project Local Development Setup
 
 ```bash
 # create a python 3.8+ virtualenv
