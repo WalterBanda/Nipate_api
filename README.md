@@ -17,6 +17,4 @@ $ cd lbs_backend
 # migrate your sqlite3 database
 $ python manage.py migrate
 $ python manage runserver
-
-
 ```

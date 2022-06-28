@@ -3,12 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from services.models import (Advertisement)
-from services.serializers import (AdvertisementSerializer)
+from services.models import Advertisement
+from services.serializers.serializer_models import AdvertisementSerializer
 
 class AdvertView(APIView):
 
-    
     UserID = openapi.Parameter('UserID', openapi.IN_QUERY, description="Get by UserID id param(optional)", type=openapi.TYPE_INTEGER)
     ProductID = openapi.Parameter('ProductID', openapi.IN_QUERY, description="Get by ProductID id param(optional)", type=openapi.TYPE_INTEGER)
     LocationID = openapi.Parameter('LocationID', openapi.IN_QUERY, description="Get by LocationID id param(optional)", type=openapi.TYPE_INTEGER)

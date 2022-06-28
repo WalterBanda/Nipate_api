@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 from services.models import (
     RequestResponse
 )
-from services.serializers import (
+from services.serializers.serializer_models import (
     RequestResponseSerializer
 )
 

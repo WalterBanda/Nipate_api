@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from django.contrib.auth import get_user_model
-from .models import (
+from services.models import (
     WorkingDays, ProductCategory, Product, ServiceProvider, ServiceRequest, RequestResponse, Advertisement
 )
 from users.serializers import UserModelSerializer, GenderSerializer

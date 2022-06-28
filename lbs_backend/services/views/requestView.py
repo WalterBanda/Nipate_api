@@ -1,14 +1,16 @@
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.parsers import JSONParser, MultiPartParser
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
 from services.models import (
-    ProductCategory, Product, ServiceProvider, ServiceRequest
+    ServiceProvider, ServiceRequest
 )
-from services.serializers import (
-    ProductCategorySerailizer, ProductSerializer, ServiceProviderSerializer, RequestedServiceSerializer
+from services.serializers.serializer_models import (
+    ServiceProviderSerializer, RequestedServiceSerializer
+)
+from services.serializers.serializer_forms import (
+    ServiceRequestCreationSerializer, CreateServiceProviderSerilizer
 )
 
 class ServiceProviderView(APIView):
@@ -39,15 +41,7 @@ class ServiceProviderView(APIView):
     
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(description="Create Service Provider Account=", type=openapi.TYPE_OBJECT,required=['UserID', 'ProductID'],
-            properties={
-                'UserID': openapi.Schema(description="UserID data", type=openapi.TYPE_INTEGER),
-                'ProductID': openapi.Schema(description="ProductID data", type=openapi.TYPE_INTEGER),
-                'LocationID': openapi.Schema(description="LocationID data(optional)", type=openapi.TYPE_INTEGER),
-                'GenderID': openapi.Schema(description="GenderID data(optional)", type=openapi.TYPE_INTEGER),
-                'AgeBracket': openapi.Schema(description="AgeBracket data(optional)", type=openapi.TYPE_STRING)
-            }
-        ),responses={200: ServiceProviderSerializer(many=False)}
+        request_body=CreateServiceProviderSerilizer,responses={200: ServiceProviderSerializer(many=False)}
     )
     def post(self, request):
         try:
@@ -105,27 +99,19 @@ class RequestServiceView(APIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
 
     @swagger_auto_schema(
-        request_body=openapi.Schema(description="Create Service Provider Account", type=openapi.TYPE_OBJECT,required=['UserID', 'ProductID'],
-            properties={
-                'UserID': openapi.Schema(description="UserID data", type=openapi.TYPE_INTEGER),
-                'ProductID': openapi.Schema(description="ProductID data", type=openapi.TYPE_INTEGER),
-                'LocationID': openapi.Schema(description="LocationID data(optional)", type=openapi.TYPE_INTEGER),
-                'RequestText': openapi.Schema(description="RequestText text(optional)", type=openapi.TYPE_STRING),
-            }
-        ),responses={201: RequestedServiceSerializer(many=False)}
+        request_body= ServiceRequestCreationSerializer,responses={201: RequestedServiceSerializer(many=False)}
     )  
     def post(self, request):
         data = request.data
-        try:
+        serializer = ServiceRequestCreationSerializer(data=data)
+        if serializer.is_valid():
             requests = ServiceRequest(
-                ProductID_id=data["ProductID"], UserID_id=["UserID"]
+                ProductID_id=data["ProductID"], UserID_id=["UserID"], LocationID_id=data["LocationID"]
             )
-            if data["LocationID"] is not None:
-                requests.LocationID_id = data["LocationID"]
             if data["RequestText"] is not None:
                 requests.RequestText = data["RequestText"]
             requests.save()
             serializer = RequestedServiceSerializer(requests, many=False)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-        except:
+        else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
