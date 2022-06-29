@@ -19,4 +19,9 @@ class ServiceRequestCreationSerializer(Serializer):
     UserID = serializers.IntegerField()
     ProductID = serializers.IntegerField()
     LocationID = serializers.IntegerField()
-    RequestText = serializers.CharField(allow_blank=True, allow_null=True)
+    RequestText = serializers.CharField(default="", allow_blank=True)
+
+class ServiceResponseCreationSerializer(Serializer):
+    RequestID = serializers.IntegerField()
+    ProviderID = serializers.IntegerField()
+    ResponseText = serializers.CharField(default="", allow_blank=True)

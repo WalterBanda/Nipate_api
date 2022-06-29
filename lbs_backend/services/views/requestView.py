@@ -1,4 +1,5 @@
 from django.db import IntegrityError
+
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -18,24 +19,32 @@ from services.serializers.serializer_forms import (
 # Service Provider CRUD Endpoint
 
 class ServiceProviderView(APIView):
-    ID = openapi.Parameter('ProviderID', openapi.IN_QUERY, description="Get by ProviderID param(optional)", type=openapi.TYPE_INTEGER)
+
+    ProviderID = openapi.Parameter('ProviderID', openapi.IN_QUERY, description="Get by ProviderID param(optional)", type=openapi.TYPE_INTEGER)
     ProductID = openapi.Parameter('ProductID', openapi.IN_QUERY, description="Get by ProductID param(optional)", type=openapi.TYPE_INTEGER)
-    @swagger_auto_schema(operation_description="Endpoint for Service Providers get response", manual_parameters=[ID, ProductID], responses={200: ServiceProviderSerializer(many=True)})
+    LocationID = openapi.Parameter('LocationID', openapi.IN_QUERY, description="Get by LocationID param(optional)", type=openapi.TYPE_INTEGER)
+    @swagger_auto_schema(operation_description="Endpoint for getting Service Providers response [you may pass all the query params]", manual_parameters=[ProviderID, ProductID, LocationID], responses={200: ServiceProviderSerializer(many=True)})
     def get(self, request):
-        data = request.query_parms
-        try:
-            provider = ServiceProvider.objects.filter(id=data["dataID"], ProductID_id=data["ProductID"])
+        data = request.query_params
+        if "ProviderID" in data:
+            provider = ServiceProvider.objects.filter(id=data["ProviderID"])
             serializer = ServiceProviderSerializer(provider, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except ServiceProvider.DoesNotExist:
-            pass
         
-        try:
+        if "ProductID" in data and "LocationID" in data:
+            provider = ServiceProvider.objects.filter(ProductID_id=data["ProductID"], LocationID_id=data["LocationID"])
+            serializer = ServiceProviderSerializer(provider, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        if "ProductID" in data:
             provider = ServiceProvider.objects.filter(ProductID_id=data["ProductID"])
             serializer = ServiceProviderSerializer(provider, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
+        
+        if "LocationID" in data:
+            provider = ServiceProvider.objects.filter(LocationID_id=data["LocationID"])
+            serializer = ServiceProviderSerializer(provider, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
         
         providers = ServiceProvider.objects.all()
         serializer = ServiceProviderSerializer(providers, many=True)
@@ -76,49 +85,38 @@ class RequestServiceView(APIView):
     ProductID = openapi.Parameter('ProductID', openapi.IN_QUERY, description="Get by ProductID param(optional)", type=openapi.TYPE_INTEGER)
     LocationID = openapi.Parameter('LocationID', openapi.IN_QUERY, description="Get by LocationID param(optional)", type=openapi.TYPE_INTEGER)
     @swagger_auto_schema(operation_description="Endpoint for Services Requests", manual_parameters=[UserID, ProductID, LocationID], responses={200: RequestedServiceSerializer(many=True)})
-    def get(self, request):
+    def get(self, request, format=None):
         
         data = request.query_params
-        try:
+
+        if "ProductID" in data and "UserID" in data and "LocationID" in data:
             requests = ServiceRequest.objects.filter(ProductID_id=data["ProductID"], UserID_id=data["UserID"], LocationID_id=data["LocationID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
-        try:
+        if "ProductID" in data and "UserID" in data:
             requests = ServiceRequest.objects.filter(UserID_id=data["UserID"], ProductID_id=data["ProductID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
         
-        try:
+        if "LocationID" in data and "UserID" in data:
             requests = ServiceRequest.objects.filter(UserID_id=data["UserID"], LocationID_id=data["LocationID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
 
-        try:
+        if "UserID" in data:
             requests = ServiceRequest.objects.filter(UserID_id=data["UserID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
         
-        try:
+        if "LocationID" in data:
             requests = ServiceRequest.objects.filter(LocationID_id=data["LocationID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
 
-        try:
+        if "ProductID" in data:
             requests = ServiceRequest.objects.filter(ProductID_id=data["ProductID"])
             serializer = RequestedServiceSerializer(requests, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
-        except:
-            pass
         
         requests = ServiceRequest.objects.all()
         serializer = RequestedServiceSerializer(requests, many=True)
