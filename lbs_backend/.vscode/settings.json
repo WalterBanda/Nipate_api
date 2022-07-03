@@ -1,3 +1,12 @@
 {
-    "window.experimental.commandCenter": false
+    "window.experimental.commandCenter": false,
+    "python.testing.unittestArgs": [
+        "-v",
+        "-s",
+        "./users",
+        "-p",
+        "test*.py"
+    ],
+    "python.testing.pytestEnabled": false,
+    "python.testing.unittestEnabled": true
 }

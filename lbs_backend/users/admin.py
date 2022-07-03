@@ -18,7 +18,7 @@ class UserCreationForm(forms.ModelForm):
         fields = (
             'MobileNumber', 'IDNumber', 'GenderID',
             'YearOfBirth', 'FirstName', 'MiddleName', 
-            'SurName', 'ADBalance'
+            'SurName', 'LocationID', 'ADBalance'
         )
     
     def clean_password2(self):
@@ -43,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
         fields = (
             'MobileNumber', 'IDNumber', 'GenderID',
             'YearOfBirth', 'FirstName', 'MiddleName', 
-            'SurName', 'ADBalance', 'password', 'is_active', 'is_admin'
+            'SurName', 'LocationID', 'ADBalance', 'password', 'is_active', 'is_admin'
         )
 
 class UserAdmin(BaseUserAdmin):
@@ -52,13 +52,13 @@ class UserAdmin(BaseUserAdmin):
 
     list_display = (
         "id", 'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-        'FirstName', 'MiddleName', 'SurName', 'ADBalance'
+        'FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance'
     )
     list_filter = ('is_admin',)
     fieldsets = (
         ('Authentication', {'fields': ('MobileNumber', 'password')}),
         ('Personal Info', {
-            'fields': ('FirstName', 'MiddleName', 'SurName', 'ADBalance',
+            'fields': ('FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance',
                 'YearOfBirth', 'GenderID'
             )
         }),
@@ -69,7 +69,7 @@ class UserAdmin(BaseUserAdmin):
             'classes': ('wide',),
             'fields': (
                 'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-                'FirstName', 'MiddleName', 'SurName', 'ADBalance',
+                'FirstName', 'MiddleName', 'SurName', 'LocationID' 'ADBalance',
                 'password1', 'password2'
             ),
         }),

@@ -1,3 +1,4 @@
+from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -21,15 +22,23 @@ class userRegistration(APIView):
             user_number = User.objects.filter(MobileNumber=data["MobileNumber"]).first()
             if user_number:
                 return Response({"Error": "User with MobileNumber already exists"}, status.HTTP_400_BAD_REQUEST)
-            user_idno = User.objects.filter(IDNumber=data["IDNumber"]).first()
-            if user_idno:
+            user_id_no = User.objects.filter(IDNumber=data["IDNumber"]).first()
+            if user_id_no:
                 return Response({"Error": "User with IDNumber already exists"}, status.HTTP_400_BAD_REQUEST)
             else:
-                user = User(MobileNumber=data["MobileNumber"], IDNumber=data["IDNumber"], FirstName=data["FirstName"])
+                user = User(MobileNumber=data["MobileNumber"], IDNumber=data["IDNumber"], FirstName=data["FirstName"], SurName=data["LastName"])
+                user.LocationID_id = data["LocationID"]
+                user.GenderID_id = data["GenderID"]
                 user.set_password(data["password"])
-                user.save()
-                serializer = UserModelSerializer(user, many=False)
-                return Response(serializer.data, status=status.HTTP_201_CREATED)
+                try:
+                    user.save()
+                    serializer = UserModelSerializer(user, many=False)
+                    return Response(serializer.data, status=status.HTTP_201_CREATED)
+                except IntegrityError:
+                    return Response(
+                        {"Error": ["Db LocationID or GenderID IntegrityError constraint failed"]},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    )
         
         return Response(users.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -38,7 +47,7 @@ class userRegistration(APIView):
     @swagger_auto_schema(operation_description="Endpoint for getting user", manual_parameters=[ID], responses={200: UserModelSerializer(many=False)})
     def get(self, request):
         data = request.query_params
-        try:
+        if "ID" in data:
             user = User.objects.filter(id=data['ID']).first()
             if user is None:
                 return Response({'Error': "User does not exists"}, status=status.HTTP_404_NOT_FOUND)
@@ -46,5 +55,5 @@ class userRegistration(APIView):
             serializer = UserModelSerializer(user, many=False)
             return Response(serializer.data, status=status.HTTP_200_OK)
         
-        except:
+        else:
             return Response({"Error": "please provide the ID param"}, status=status.HTTP_400_BAD_REQUEST)

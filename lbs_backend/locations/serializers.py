@@ -11,7 +11,7 @@ class TownsModelSerializer(ModelSerializer):
 
 class CountyModelSerializers(ModelSerializer):
 
-    Towns = TownsModelSerializer(read_only=True, source="counties", many=True)
+    # Towns = TownsModelSerializer(read_only=True, source="counties", many=True)
     class Meta:
         model = CountyModel
-        fields = ["id", "Name", "Towns"]
+        fields = ["id", "Name"]

@@ -33,4 +33,7 @@ class userRegistrationSerializer(serializers.Serializer):
     MobileNumber = serializers.CharField(max_length=10)
     IDNumber = serializers.IntegerField()
     FirstName = serializers.CharField(max_length=50)
+    LastName = serializers.CharField(max_length=50)
+    LocationID = serializers.IntegerField()
+    GenderID = serializers.IntegerField()
     password= serializers.CharField(min_length=8)
