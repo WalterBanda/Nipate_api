@@ -26,14 +26,15 @@ class TestSetup(APITestCase):
             "name": "Male"
         }
         Gender.objects.create(**self.gender)
-        self.gender_id = Gender.objects.get(id=1).id
-        User.objects.create(**self.user_a, GenderID_id=self.gender_id)
+        self.genderObj = Gender.objects.get(id=1)
+        User.objects.create(**self.user_a, GenderID_id=self.genderObj.id)
+        self.userObj = User.objects.get(id=1)
 
         """create Location"""
         CountyModel.objects.create(Name="Nakuru")
-        self.county_id = CountyModel.objects.get(id=1)
-        TownsModel.objects.create(Name="Kabarak", County=self.county_id)
-        self.town_id = TownsModel.objects.get(id=1)
+        self.county = CountyModel.objects.get(id=1)
+        TownsModel.objects.create(Name="Kabarak", County_id=self.county.id)
+        self.townObj = TownsModel.objects.get(id=1)
 
         return super().setUp()
     

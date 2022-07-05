@@ -11,7 +11,7 @@ class TestViews(TestSetup):
 
     def test_user_registration_with_endpoints(self):
         user = self.client.post(self.register_url, data={
-            **self.user_b, 'LastName': "Kipyegon", "LocationID": 1, "GenderID": self.gender_id
+            **self.user_b, 'LastName': "Kipyegon", "LocationID": self.townObj.id, "GenderID": self.genderObj.id
         })
         self.assertEqual(201, user.status_code)
         self.assertEqual(2, user.data["id"])
