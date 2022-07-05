@@ -26,7 +26,8 @@ class TestSetup(APITestCase):
             "name": "Male"
         }
         Gender.objects.create(**self.gender)
-        User.objects.create(**self.user_a, GenderID_id=Gender.objects.get(id=1).id)
+        self.gender_id = Gender.objects.get(id=1).id
+        User.objects.create(**self.user_a, GenderID_id=self.gender_id)
 
         """create Location"""
         CountyModel.objects.create(Name="Nakuru")
