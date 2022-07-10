@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")#.split("/")
 ALLOWED_HOSTS = ['64.227.130.161', '127.0.0.1', 'nipate.netlify.app']
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161:8090', 'http://0.0.0.0:8090']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
 SECRET_KEY = os.environ.get("SECRET_KEY", "foo")
 DEBUG = int(os.environ.get("DEBUG", default=1))
 
