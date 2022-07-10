@@ -25,7 +25,7 @@ services:
     volumes:
       - static_volume:/home/lbs_backend/web/staticfiles
     ports:
-      - 8090:80
+      - "80:80"
     depends_on:
       - web
 

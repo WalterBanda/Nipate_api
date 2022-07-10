@@ -9,9 +9,10 @@ from drf_yasg import openapi
 admin.site.site_header = "Location Based Mobile Advertising System Database "
 admin.site.index_title = "Applications"
 
+
 schema_view = get_schema_view(
    openapi.Info(
-      title="Nipate data source and API", default_version='v1.0', description="LBS API's Doc",
+      title="Nipate data source and API", default_version='v1.0', description="LBS APIs Doc",
       terms_of_service="https://www.google.com/policies/terms/", contact=openapi.Contact(email="amosditto@gmail.com"),
       license=openapi.License(name="BSD License"),
    ), public=True, permission_classes=[permissions.AllowAny],
