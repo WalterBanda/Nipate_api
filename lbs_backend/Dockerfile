@@ -14,7 +14,7 @@ RUN apt-get update \
 
 RUN pip install --upgrade pip
 COPY . .
-COPY ../requirements.txt .
+COPY requirements.txt .
 RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/lbs_backend/wheels -r requirements.txt
 
 
