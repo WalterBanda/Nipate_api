@@ -1,4 +1,5 @@
 __pycache__/
 *.pyc
-.env.prod
-.env.prod.db
+#.env.prod
+#.env.prod.db
+#.env.staging.proxy-companion

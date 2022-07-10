@@ -3,10 +3,9 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")#.split("/")
-ALLOWED_HOSTS = ['64.227.130.161', '127.0.0.1', 'nipate.netlify.app']
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
+ALLOWED_HOSTS = ['64.227.130.161', '127.0.0.1', 'nipate.netlify.app', 'nipate.me']
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app", "https://nipate.me"]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
 SECRET_KEY = os.environ.get("SECRET_KEY", "foo")
 DEBUG = int(os.environ.get("DEBUG", default=1))
@@ -93,7 +92,6 @@ DATABASES = {
     }
 }
 
-
 AUTH_USER_MODEL = 'users.CustomUser'
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -117,8 +115,9 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARD_PROTO", "https")
