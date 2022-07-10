@@ -1,14 +1,14 @@
 from rest_framework.test import APITestCase
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-from users.models import Gender
-from locations.models import CountyModel, TownsModel
-
+from ..models import Gender
+from ...locations.models import CountyModel, TownsModel
 
 User = get_user_model()
 
+
 class TestSetup(APITestCase):
-    
+
     def setUp(self):
         self.register_url = reverse("user")
         self.login_url = reverse("login")
@@ -37,6 +37,6 @@ class TestSetup(APITestCase):
         self.townObj = TownsModel.objects.get(id=1)
 
         return super().setUp()
-    
+
     def tearDown(self):
         return super().tearDown()

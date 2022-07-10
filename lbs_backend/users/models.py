@@ -1,7 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
-from users.managers import UserManager
-from locations.models import TownsModel
+from .managers import UserManager
+from ..locations.models import TownsModel
+
 
 # ----> Gender Table
 
@@ -11,10 +12,12 @@ class Gender(models.Model):
     class Meta:
         verbose_name = 'Gender'
         verbose_name_plural = 'Gender'
+
     def __str__(self):
         return str(self.name)
 
-# ----> User Table 
+
+# ----> User Table
 
 class CustomUser(AbstractBaseUser):
     MobileNumber = models.CharField(max_length=10, unique=True)
@@ -39,16 +42,17 @@ class CustomUser(AbstractBaseUser):
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
-
     def __str__(self):
         return self.MobileNumber
-    
-    def has_perm(self, perm, obj=None):
+
+    @staticmethod
+    def has_perm(perm, obj=None):
         return True
-    
-    def has_module_perms(self, app_label):
+
+    @staticmethod
+    def has_module_perms(app_label):
         return True
-    
+
     @property
     def is_staff(self):
         return self.is_admin

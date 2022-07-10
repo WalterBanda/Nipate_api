@@ -1,14 +1,16 @@
 import os
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")#.split("/")
-ALLOWED_HOSTS = ['64.227.130.161', '127.0.0.1', 'nipate.netlify.app', 'nipate.me']
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app", "https://nipate.me"]
-CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
-SECRET_KEY = os.environ.get("SECRET_KEY", "foo")
-DEBUG = int(os.environ.get("DEBUG", default=1))
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", '127.0.0.1', 'localhost').split(',')
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
+#CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
+
+SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
+DEBUG = os.getenv("DEBUG", "False") == "True"
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,16 +83,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+if DEVELOPMENT_MODE is True:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        }
     }
-}
+elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
+    if os.getenv("DATABASE_URL", None) is None:
+        raise Exception("DATABASE_URL environment variable not defined")
+    DATABASES = {
+        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+    }
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
@@ -115,9 +121,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_URL = "/static/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARD_PROTO", "https")
