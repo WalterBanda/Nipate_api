@@ -1,5 +1,6 @@
 import os
 import sys
+import dj_database_url
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
@@ -12,7 +13,7 @@ DEBUG = os.getenv("DEBUG", "False") == "True"
 ALLOWED_HOSTS = ['*']
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
-#CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
 
 
 INSTALLED_APPS = [
