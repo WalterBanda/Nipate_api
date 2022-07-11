@@ -9,7 +9,7 @@ SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
 DEBUG = os.getenv("DEBUG", "False") == "True"
 
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost,nipate-mt8eh.ondigitalocean.app").split(",")
 
 CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
 #CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
