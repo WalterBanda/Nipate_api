@@ -61,6 +61,7 @@ class ServiceProvider(models.Model):
     class Meta:
         verbose_name = "Service Providers"
         verbose_name_plural = "Service Providers"
+        ordering = ['TimeStamp']
 
     def __str__(self):
         return "%s || %s" % (str(self.id), str(self.UserID))
@@ -76,6 +77,7 @@ class ServiceRequest(models.Model):
     class Meta:
         verbose_name = "Requested Services"
         verbose_name_plural = "Requested Services"
+        ordering = ['-Timestamp']
 
     def __str__(self):
         return "%s || %s" % (str(self.ProductID), str(self.UserID))
