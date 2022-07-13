@@ -1,16 +1,20 @@
 import os
+import sys
+import dj_database_url
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS")#.split("/")
-ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", '127.0.0.1', 'localhost').split(',')
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
-#CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
+SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
 
-SECRET_KEY = os.getenv("SECRET_KEY", get_random_secret_key())
-DEBUG = os.getenv("DEBUG", "False") == "True"
+DEBUG = os.getenv("DEBUG", "True") == "True"
+
+ALLOWED_HOSTS = ['*']
+
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
+# CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
+
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -51,6 +55,9 @@ DJOSER = {
         'token_create': 'djoser.serializers.TokenCreateSerializer',
     },
 }
+SWAGGER_SETTINGS = {
+    'DEFAULT_AUTO_SCHEMA_CLASS': 'lbs_backend.utils.CustomSwaggerAutoSchema',
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -83,12 +90,13 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "False") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
+
 if DEVELOPMENT_MODE is True:
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
 elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
@@ -121,7 +129,7 @@ USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
-STATIC_URL = "/static/"
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -3,3 +3,5 @@ __pycache__/
 #.env.prod
 #.env.prod.db
 #.env.staging.proxy-companion
+.pytest_cache
+db.sqlite3

@@ -27,7 +27,7 @@ class userRegistration(APIView):
                 return Response({"Error": "User with IDNumber already exists"}, status.HTTP_400_BAD_REQUEST)
             else:
                 user = User(MobileNumber=data["MobileNumber"], IDNumber=data["IDNumber"], FirstName=data["FirstName"],
-                            SurName=data["LastName"])
+                            SurName=data["SurName"])
                 user.LocationID_id = data["LocationID"]
                 user.GenderID_id = data["GenderID"]
                 user.set_password(data["password"])

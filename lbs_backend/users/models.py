@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
-from ..locations.models import TownsModel
+from locations.models import TownsModel
 
 
 # ----> Gender Table
