@@ -13,7 +13,7 @@ from services.serializers.serializer_models import (
     ServiceProviderSerializer, RequestedServiceSerializer
 )
 from services.serializers.serializer_forms import (
-    CreateServiceProviderSerilizer, ServiceRequestCreationSerializer, ServiceResponseCreationSerializer
+    CreateServiceProviderSerilizer, ServiceRequestCreationSerializer
 )
 from ..crud.requestsCrud import (get_services_requests, get_service_providers)
 

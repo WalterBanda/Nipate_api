@@ -5,3 +5,6 @@ __pycache__/
 #.env.staging.proxy-companion
 .pytest_cache
 db.sqlite3
+.coverage
+.env
+.idea

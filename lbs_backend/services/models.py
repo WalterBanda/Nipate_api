@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from locations.models import (TownsModel)
+from locations.models import TownsModel
 from users.models import Gender
 
 UserModel = get_user_model()
