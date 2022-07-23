@@ -23,22 +23,24 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # packages
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
     'corsheaders',
     'djoser',
-    'users',
-    'locations',
-    'services',
+
+    # apps
+    'users.apps.UsersConfig',
+    'locations.apps.LocationsConfig',
+    'services.apps.ServicesConfig',
 ]
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 1,
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 

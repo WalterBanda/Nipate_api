@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import requestView, responseView, advertView
+from .views import requestView, responseView, advertView, Products
 
 urlpatterns = [
     # Request Views
@@ -10,5 +10,9 @@ urlpatterns = [
     path('service-response/', responseView.RequestedResponseView.as_view()),
 
     # Adverts Views
-    path('advert/', advertView.AdvertView.as_view())
+    path('advert/', advertView.AdvertView.as_view()),
+
+    # Products Views
+    path('category/', Products.productCategoryView.as_view(), name='categories'),
+    path('products/', Products.productsView.as_view(), name='products'),
 ]
