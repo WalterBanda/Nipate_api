@@ -33,11 +33,21 @@ class UserModelSerializer(serializers.ModelSerializer):
         return IDNumber
 
 
-class userRegistrationSerializer(serializers.Serializer):
-    MobileNumber = serializers.CharField(max_length=10, min_length=10)
+class userDetailsValidationSerializer(serializers.Serializer):
+    MobileNumber = serializers.CharField(max_length=12,
+                                         min_length=12, error_messages={'blank': 'invalid mobile number',
+                                                                        'length': 'invalid mobile number'})
     IDNumber = serializers.IntegerField()
     FirstName = serializers.CharField(max_length=50)
     SurName = serializers.CharField(max_length=50)
+
+
+class userPutDetailSerializer(serializers.Serializer):
+    UserID = serializers.IntegerField()
     LocationID = serializers.IntegerField()
     GenderID = serializers.IntegerField()
     password = serializers.CharField(min_length=8)
+
+
+class tokenSerializer(serializers.Serializer):
+    auth_token = serializers.CharField()
