@@ -5,7 +5,7 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from ..models import ProductCategory, Product
-from ..serializers.serializer_models import ProductCategorySerailizer, ProductSerializer
+from ..serializers.serializer_models import ProductCategorySerailizer, ProductSerializer, InverseCategorySerializer
 
 
 class productCategoryView(APIView):
@@ -43,4 +43,16 @@ class productsView(APIView):
 
         obj = Product.objects.all()
         serializer = ProductSerializer(obj, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class AllProductsView(APIView):
+
+    @swagger_auto_schema(operation_description="Endpoint for finding All services",
+                         responses={200: InverseCategorySerializer(many=True)})
+    def get(self, request):
+
+        products = ProductCategory.objects.all()
+
+        serializer = InverseCategorySerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)

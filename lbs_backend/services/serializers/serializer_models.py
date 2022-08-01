@@ -5,6 +5,7 @@ from ..models import (
 )
 from users.serializers import UserModelSerializer, GenderSerializer
 from locations.serializers import TownsModelSerializer
+# from ...locations.serializers import TownsModelSerializer
 
 
 class WorkingDaySerializer(ModelSerializer):
@@ -32,11 +33,11 @@ class InverseProductSerializer(ModelSerializer):
 
 
 class InverseCategorySerializer(ModelSerializer):
-    Product = InverseProductSerializer(source="CategoryID")
+    products = InverseProductSerializer(source="category", many=True, read_only=True)
 
     class Meta:
         model = ProductCategory
-        fields = ["id", "Name", "Product"]
+        fields = ["id", "Name", "products"]
 
 
 class ServiceProviderSerializer(ModelSerializer):
