@@ -1,81 +1,63 @@
-# Inherited classes from Djoser
-from djoser.views import (
-    UserViewSet, TokenCreateView, TokenDestroyView
-)
+from rest_framework.views import APIView
+from rest_framework import status, permissions
+from rest_framework.response import Response
+from django.contrib.auth import get_user_model
+from rest_framework.authtoken.models import Token
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 
-from rest_framework.decorators import action
-
-
-class MySiteAuthViews(UserViewSet):
-    serializer_class = UserViewSet.serializer_class
-    queryset = UserViewSet.queryset
-    permission_classes = UserViewSet.permission_classes
-    token_generator = UserViewSet.token_generator
-    lookup_field = UserViewSet.lookup_field
-
-    def permission_denied(self, request, **kwargs):
-        return super().permission_denied(request, **kwargs)
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-    def get_permissions(self):
-        return super().get_permissions()
-
-    def get_serializer_class(self):
-        return super().get_serializer_class()
-
-    def get_instance(self):
-        return super().get_instance()
-
-    def perform_create(self, serializer):
-        return super().perform_create(serializer)
-
-    def perform_update(self, serializer):
-        return super().perform_update(serializer)
-
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
-
-    @action(["get", "delete"], detail=False)
-    def me(self, request, *args, **kwargs):
-        return super().me(request, *args, **kwargs)
-
-    def activation(self, request, *args, **kwargs):
-        return super().activation(request, *args, **kwargs)
-
-    def resend_activation(self, request, *args, **kwargs):
-        return super().resend_activation(request, *args, **kwargs)
-
-    def set_password(self, request, *args, **kwargs):
-        return super().set_password(request, *args, **kwargs)
-
-    def reset_password(self, request, *args, **kwargs):
-        return super().reset_password(request, *args, **kwargs)
-
-    def reset_password_confirm(self, request, *args, **kwargs):
-        return super().reset_password_confirm(request, *args, **kwargs)
-
-    def set_username(self, request, *args, **kwargs):
-        return super().set_username(request, *args, **kwargs)
-
-    def reset_username(self, request, *args, **kwargs):
-        return super().reset_username(request, *args, **kwargs)
-
-    def reset_username_confirm(self, request, *args, **kwargs):
-        return super().reset_username_confirm(request, *args, **kwargs)
+from ..serializers import CreateAuthToken, LoginResponseSerializer
 
 
-class MyTokenCreateView(TokenCreateView):
-    serializer_class = TokenCreateView.serializer_class
-    permission_classes = TokenCreateView.permission_classes
-
-    def _action(self, serializer):
-        return super()._action(serializer)
+User = get_user_model()
 
 
-class MyTokenDestroyView(TokenDestroyView):
-    permission_classes = TokenDestroyView.permission_classes
+def postUserLogin(data):
+    user = User.objects.filter(MobileNumber=data["MobileNumber"]).first()
 
+    if user:
+        if user.check_password(data["password"]):
+            return user
+        else:
+            return {"error": ["Invalid user creditentials"]}
+    else:
+        return {"error": ["User not found"]}
+
+
+class LoginJwtToken(APIView):
+
+    @swagger_auto_schema(tags=['User'], operation_description="Get JWT token Header",
+                         request_body=CreateAuthToken,
+                         responses={200: LoginResponseSerializer(many=False)}
+                         )
     def post(self, request):
-        return super().post(request)
+        post_data = request.data
+        serializer = CreateAuthToken(data=post_data)
+        if serializer.is_valid():
+            user = postUserLogin(post_data)
+            try:
+                token, _ = Token.objects.get_or_create(user_id=user.id)
+                results = LoginResponseSerializer({
+                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName,
+                    "Auth_token": token.key
+                }, many=False)
+                return Response(results.data, status.HTTP_200_OK)
+
+            except:
+                return Response(user, status.HTTP_401_UNAUTHORIZED)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+class LogOutJwtToken(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    response = openapi.Schema('User', openapi.IN_BODY, type=openapi.TYPE_STRING)
+
+    @swagger_auto_schema(tags=['User'], operation_description="Delete JWT token Header",
+                         responses={200: response}
+                         )
+    def post(self, request):
+        print(request.user)
+        request.user.auth_token.delete()
+        return Response({"User": "succesfully log out"}, status.HTTP_200_OK)
