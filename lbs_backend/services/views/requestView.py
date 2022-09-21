@@ -6,13 +6,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from drf_yasg import openapi
 from drf_yasg.utils import swagger_auto_schema
-from services.models import (
+from ..models import (
     ServiceProvider, ServiceRequest
 )
-from services.serializers.serializer_models import (
+from ..serializers.serializer_models import (
     ServiceProviderSerializer, RequestedServiceSerializer
 )
-from services.serializers.serializer_forms import (
+from ..serializers.serializer_forms import (
     CreateServiceProviderSerilizer, ServiceRequestCreationSerializer
 )
 from ..crud.requestsCrud import (get_services_requests, get_service_providers)

@@ -51,3 +51,14 @@ class userPutDetailSerializer(serializers.Serializer):
 
 class tokenSerializer(serializers.Serializer):
     auth_token = serializers.CharField()
+
+
+class CreateAuthToken(serializers.Serializer):
+    MobileNumber = serializers.CharField(max_length=12, min_length=10)
+    password = serializers.CharField(min_length=4)
+
+
+class LoginResponseSerializer(serializers.Serializer):
+    MobileNumber = serializers.CharField()
+    FirstName = serializers.CharField()
+    Auth_token = serializers.CharField()
