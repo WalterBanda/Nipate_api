@@ -12,7 +12,10 @@ DEBUG = os.getenv("DEBUG", "True") == "True"
 
 ALLOWED_HOSTS = ['*']
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:3000", "https://nipate.netlify.app"]
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000", "http://127.0.0.1:3000",
+    "https://nipate.netlify.app", "http://localhost:5173"
+]
 # CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
 
 
