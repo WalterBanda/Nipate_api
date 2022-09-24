@@ -38,7 +38,8 @@ class UserRegister(APIView):
 
     @swagger_auto_schema(
         tags=['User'],
-        operation_description='Update user details with Password , Location & gender.',
+        operation_description='Update user details with: <br> -> Password <br> -> Location (From Counties list id: '
+                              '`/location/counties/`) <br> -> Gender id.[Male: 1, Female: 2]',
         request_body=userPutDetailSerializer, responses={201: LoginResponseSerializer(many=False)}
     )
     def put(self, request):
