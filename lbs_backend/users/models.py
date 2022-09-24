@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
 from .managers import UserManager
-from locations.models import TownsModel
+from locations.models import TownsModel, CountyModel
 
 
 # ----> Gender Table
@@ -27,7 +27,7 @@ class CustomUser(AbstractBaseUser):
     FirstName = models.CharField(max_length=50, null=True, blank=True)
     MiddleName = models.CharField(max_length=50, null=True, blank=True)
     SurName = models.CharField(max_length=50, null=True, blank=True)
-    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True)
+    LocationID = models.ForeignKey(CountyModel, on_delete=models.PROTECT, null=True, blank=True)
     ADBalance = models.FloatField(default=0, null=True, blank=True)
     DateCreated = models.DateField(auto_now_add=True)
     is_active = models.BooleanField(default=True)

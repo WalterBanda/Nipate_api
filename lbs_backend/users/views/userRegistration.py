@@ -6,7 +6,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from django.contrib.auth import get_user_model
 from ..serializers import (
-    UserModelSerializer,
+    UserModelSerializer, LoginResponseSerializer,
     userDetailsValidationSerializer, userPutDetailSerializer, tokenSerializer)
 
 User = get_user_model()
@@ -39,7 +39,7 @@ class UserRegister(APIView):
     @swagger_auto_schema(
         tags=['User'],
         operation_description='Update user details with Password , Location & gender.',
-        request_body=userPutDetailSerializer, responses={201: tokenSerializer(many=False)}
+        request_body=userPutDetailSerializer, responses={201: LoginResponseSerializer(many=False)}
     )
     def put(self, request):
         data = request.data
@@ -54,7 +54,12 @@ class UserRegister(APIView):
                 user.save()
                 token, _ = Token.objects.get_or_create(user=user)
 
-                return Response({'auth_token': token.key}, status=status.HTTP_201_CREATED)
+                results = LoginResponseSerializer({
+                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName,
+                    "Auth_token": token.key
+                }, many=False)
+
+                return Response(results.data, status=status.HTTP_201_CREATED)
             else:
                 return Response({'Error': "User doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
         else:
