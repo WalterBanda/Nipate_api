@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
+from locations.serializers import CountyModelSerializers
 from .models import (
     CustomUser, Gender
 )
@@ -62,3 +63,17 @@ class LoginResponseSerializer(serializers.Serializer):
     MobileNumber = serializers.CharField()
     FirstName = serializers.CharField()
     Auth_token = serializers.CharField()
+
+
+# All User Details serializer
+
+class AllDetailSerializer(serializers.ModelSerializer):
+    Location = CountyModelSerializers(read_only=True, source="LocationID", many=False)
+    Gender = GenderSerializer(read_only=True, source="GenderID", many=False)
+
+    class Meta:
+        model = CustomUser
+        fields = [
+            "id", "MobileNumber", "IDNumber", "FirstName", "SurName",
+            "Location", "Gender"
+        ]
