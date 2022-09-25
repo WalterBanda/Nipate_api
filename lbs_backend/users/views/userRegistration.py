@@ -51,7 +51,7 @@ class UserRegister(APIView):
             if user:
                 user.GenderID_id = data['GenderID']
                 user.LocationID_id = data['LocationID']
-                user.set_password = data['password']
+                user.set_password(data['password'])
                 user.save()
                 token, _ = Token.objects.get_or_create(user=user)
 
