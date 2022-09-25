@@ -46,7 +46,7 @@ class UserRegister(APIView):
         data = request.data
         validate = userPutDetailSerializer(data=data)
         if validate.is_valid():
-            user = User.objects.get(id=data['UserID'])
+            user = User.objects.filter(id=data['UserID']).first()
             print(user)
             if user:
                 user.GenderID_id = data['GenderID']
