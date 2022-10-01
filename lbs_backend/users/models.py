@@ -43,7 +43,7 @@ class CustomUser(AbstractBaseUser):
         verbose_name_plural = 'Users'
 
     def __str__(self):
-        return self.MobileNumber
+        return "{} | {}".format(self.MobileNumber, self.FirstName)
 
     @staticmethod
     def has_perm(perm, obj=None):

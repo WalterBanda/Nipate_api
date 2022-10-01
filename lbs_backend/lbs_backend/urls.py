@@ -47,6 +47,7 @@ urlpatterns = [
     path('auth/', include('users.urls')),
     path('service/', include("services.urls")),
     path('location/', include('locations.urls')),
+    path('provider/', include('provider.urls')),
 ]
 
 if bool(settings.DEBUG):

@@ -22,6 +22,13 @@ from .serializers.serializer_forms import (
 from .crud.requestsCrud import (get_services_requests, get_service_providers)
 
 
+# Create Provider
+class CreateProvider(APIView):
+
+    def post(self, request):
+        pass
+
+
 # Product Views
 class productCategoryView(APIView):
 

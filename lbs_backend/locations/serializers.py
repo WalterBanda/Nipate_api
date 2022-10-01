@@ -22,3 +22,13 @@ class LocationSerializer(ModelSerializer):
     class Meta:
         model = CountyModel
         fields = ["id", "Name", "Towns"]
+
+
+class LocationCountySerializer(ModelSerializer):
+    County = CountyModelSerializers(read_only=True, source="counties")
+
+    class Meta:
+        model = TownsModel
+        fields = [
+            "id", "Name", "County"
+        ]

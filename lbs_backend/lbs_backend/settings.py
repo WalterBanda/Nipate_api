@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'locations.apps.LocationsConfig',
     'services.apps.ServicesConfig',
+    'provider.apps.ProviderConfig',
 ]
 
 REST_FRAMEWORK = {
