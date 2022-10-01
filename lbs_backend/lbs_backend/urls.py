@@ -44,12 +44,10 @@ urlpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
     #  applications urls
-    # path("favicon.ico", views.favicon),
-    # re_path("^favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"))),
     path('auth/', include('users.urls')),
     path('service/', include("services.urls")),
     path('location/', include('locations.urls')),
 ]
 
-# if bool(settings.DEBUG):
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+if bool(settings.DEBUG):
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
