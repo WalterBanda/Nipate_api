@@ -1,12 +1,14 @@
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf import settings
 from django.conf.urls.static import static
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
-
 from drf_yasg.generators import OpenAPISchemaGenerator
+from users import views
+from django.contrib.staticfiles.storage import staticfiles_storage
+from django.views.generic.base import RedirectView
 
 class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
   def get_schema(self, request=None, public=False):
@@ -36,16 +38,18 @@ schema_view = get_schema_view(
    ), public=True, permission_classes=[permissions.AllowAny], generator_class=CustomOpenAPISchemaGenerator,
 )
 urlpatterns = [
-   # default project urls
-   path('admin/', admin.site.urls),
-   path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-   path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+    # default project urls
+    path('admin/', admin.site.urls),
+    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 
-   #  applications urls
-   path('auth/', include('users.urls')),
-   path('service/', include("services.urls")),
-   path('location/', include('locations.urls')),
+    #  applications urls
+    # path("favicon.ico", views.favicon),
+    # re_path("^favicon.ico", RedirectView.as_view(url=staticfiles_storage.url("favicon.ico"))),
+    path('auth/', include('users.urls')),
+    path('service/', include("services.urls")),
+    path('location/', include('locations.urls')),
 ]
 
-if bool(settings.DEBUG):
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+# if bool(settings.DEBUG):
+urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

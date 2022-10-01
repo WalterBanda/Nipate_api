@@ -3,9 +3,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
-
 from django.contrib.auth import get_user_model
 from drf_yasg import openapi
+from django.conf import settings
+from django.views.decorators.cache import cache_control
+from django.views.decorators.http import require_GET
+from django.http import FileResponse
 
 from .serializers import (
     UserModelSerializer, LoginResponseSerializer, CreateAuthToken,
@@ -13,6 +16,14 @@ from .serializers import (
 )
 
 User = get_user_model()
+
+
+# App site favicon
+@require_GET
+@cache_control(max_age=60 * 60 * 24, immutable=True, public=True)
+def favicon(request):
+    file = (settings.BASE_DIR / "statics" / "favicon.png").open("rb")
+    return FileResponse(file)
 
 
 class UserRegister(APIView):
@@ -129,7 +140,8 @@ class LogOutJwtToken(APIView):
 class FetchUserDetail(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
-    @swagger_auto_schema(tags=['User'], operation_description="Get All  `Me`  Details <br> * User must be Authenticated",
+    @swagger_auto_schema(tags=['User'],
+                         operation_description="Get All  `Me`  Details <br> * User must be Authenticated",
                          responses={200: AllDetailSerializer(many=False)}
                          )
     def get(self, request):
