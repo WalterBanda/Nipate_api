@@ -12,13 +12,16 @@ class CountyModel(models.Model):
         return self.Name
 
 
-class TownsModel(models.Model):
-    Name = models.CharField(max_length=50)
-    County = models.ForeignKey(CountyModel, on_delete=models.CASCADE, related_name="counties")
+class CenterLocation(models.Model):
+    DisplayName = models.CharField(max_length=250)
+    State = models.CharField(max_length=150, null=True, blank=True)
+    Town = models.CharField(max_length=150, null=True, blank=True)
+    Suburb = models.CharField(max_length=150, null=True, blank=True)
+    Road = models.CharField(max_length=150, null=True, blank=True)
 
     class Meta:
-        verbose_name = "Towns"
-        verbose_name_plural = "Towns"
+        verbose_name = "Center Locations"
+        verbose_name_plural = "Center Locations"
 
-    def __str__(self):
-        return self.Name
+    def str(self):
+        return self.DisplayName

@@ -22,6 +22,10 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
                            " the the non admin access endpoints. After Registration you need to get your JWT access token "
                            "to send requests to the API endpoints"
         },
+        {
+            "name": "Provider",
+            "description": "Provider Endpoints For handling their Functionalities"
+        }
     ]
 
     return swagger

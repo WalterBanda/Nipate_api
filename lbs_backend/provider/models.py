@@ -1,14 +1,14 @@
 from django.db import models
 from django.contrib.auth import get_user_model
-from services.models import Product, WorkingDays
-from users.models import Gender
-from locations.models import TownsModel
+from services.models import Service, WorkingDays
+from users.models import Gender, CustomUser
+from locations.models import CenterLocation
 
 User = get_user_model()
 
 
 class ProviderModel(models.Model):
-    UserID = models.OneToOneField(User, on_delete=models.CASCADE, related_name="UserProviderID")
+    UserID = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="UserProviderID")
     TimeStamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -27,9 +27,9 @@ class ProviderService(models.Model):
     ]
     ProviderID = models.ForeignKey(ProviderModel, on_delete=models.CASCADE, related_name="providerID")
     ProviderServiceName = models.CharField(max_length=250)
-    ProductID = models.ForeignKey(Product, on_delete=models.PROTECT, related_name="providerProductID")
-    LocationID = models.ForeignKey(TownsModel, on_delete=models.PROTECT, null=True, blank=True,
-                                   related_name="providerLocation")
+    ProductID = models.ForeignKey(Service, on_delete=models.PROTECT, related_name="providerProductID")
+    CenterLocationID = models.ForeignKey(CenterLocation, on_delete=models.PROTECT, null=True, blank=True,
+                                         related_name="providerLocation")
     GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True,
                                  related_name="providerGenders")
     AgeBracket = models.CharField(max_length=9, choices=AGE, null=True, blank=True)

@@ -9,4 +9,4 @@ class ProviderAdmin(admin.ModelAdmin):
 
 @admin.register(ProviderService)
 class ProviderServiceAdmin(admin.ModelAdmin):
-    list_display = ['ProviderServiceName', 'ProviderID', 'ProductID', 'LocationID']
+    list_display = ['ProviderServiceName', 'ProviderID', 'ProductID', 'CenterLocationID']
