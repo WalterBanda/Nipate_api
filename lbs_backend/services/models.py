@@ -9,8 +9,8 @@ class ServiceCategory(models.Model):
     Name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "Product Categories"
-        verbose_name_plural = "Product Categories"
+        verbose_name = "Service Categories"
+        verbose_name_plural = "Service Categories"
 
     def __str__(self):
         return self.Name
@@ -21,8 +21,8 @@ class Service(models.Model):
     Name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name = "Products"
-        verbose_name_plural = "Products"
+        verbose_name = "Services"
+        verbose_name_plural = "Services"
 
 
 class WorkingDays(models.Model):

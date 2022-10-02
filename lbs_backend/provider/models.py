@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from services.models import Service, WorkingDays
 from users.models import Gender, CustomUser
-from locations.models import CenterLocation
+from locations.models import CenterLocation, CountyModel
 
 User = get_user_model()
 
 
 class ProviderModel(models.Model):
     UserID = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="UserProviderID")
+    CountyID = models.ForeignKey(CountyModel, on_delete=models.CASCADE, related_name="provider_county", null=True)
     TimeStamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:

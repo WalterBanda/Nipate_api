@@ -2,17 +2,22 @@ from rest_framework import serializers
 from .models import ProviderModel, ProviderService
 from users.serializers import UserModelSerializer
 from services.serializers import ServiceSerializer
-from locations.serializers import CenterLocationSerializer
+from locations.serializers import CenterLocationSerializer, CountyModelSerializers
 
 
 class ProviderSerializer(serializers.ModelSerializer):
     User = UserModelSerializer(read_only=True, source="UserID", many=False)
+    County = CountyModelSerializers(source="CountyID", read_only=True, many=False)
 
     class Meta:
         model = ProviderModel
         fields = [
-            "id", "User"
+            "id", "User", "County"
         ]
+
+
+class CreateProviderSerializer(serializers.Serializer):
+    CountyID = serializers.IntegerField()
 
 
 class ProviderServiceSerializer(serializers.ModelSerializer):
