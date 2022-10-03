@@ -88,8 +88,8 @@ def updateProviderServiceLocation(request, format=None):
         if service:
             service.Longitude = request.data["Longitude"]
             service.Lattitude = request.data["Lattitude"]
+            service.CenterLocationID = pinProviderServiceCenter(service)
             service.save()
-            center = pinProviderServiceCenter(service)
             return Response(ProviderServiceSerializer(service, many=False).data, status.HTTP_200_OK)
         else:
             return Response({"Error": "Service Doesn't Exists"}, status.HTTP_404_NOT_FOUND)

@@ -18,6 +18,8 @@ class CenterLocation(models.Model):
     Town = models.CharField(max_length=150, null=True, blank=True)
     Suburb = models.CharField(max_length=150, null=True, blank=True)
     Road = models.CharField(max_length=150, null=True, blank=True)
+    Landmark = models.CharField(max_length=150, null=True, blank=True)
+    CenterBlock = models.CharField(max_length=150, null=True, blank=True)
 
     class Meta:
         verbose_name = "Center Locations"
