@@ -18,29 +18,28 @@ CORS_ALLOWED_ORIGINS = [
     "https://nipate-web-client-beta.vercel.app"
 ]
 # CSRF_TRUSTED_ORIGINS = ['http://localhost:8090', 'http://64.227.130.161', 'http://0.0.0.0:8090']
-
-
-INSTALLED_APPS = [
+DJANGO_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # packages
-    'rest_framework',
-    'rest_framework.authtoken',
-    'drf_yasg',
-    'corsheaders',
-    'djoser',
-
-    # apps
+]
+PROJECT_APPS = [
     'users.apps.UsersConfig',
     'locations.apps.LocationsConfig',
     'services.apps.ServicesConfig',
     'provider.apps.ProviderConfig',
 ]
+THIRD_PARTY_APPS = [
+    'rest_framework',
+    'rest_framework.authtoken',
+    'drf_yasg',
+    'corsheaders',
+]
+
+INSTALLED_APPS = DJANGO_APPS + PROJECT_APPS + THIRD_PARTY_APPS
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -49,21 +48,16 @@ REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
 
-DJOSER = {
-    "PASSWORD_RESET_CONFIRM_URL": False,
-    "USERNAME_RESET_CONFIRM_URL": False,
-    "SEND_ACTIVATION_EMAIL": False,
-    "SERIALIZERS": {
-        'user_create': 'djoser.serializers.UserCreateSerializer',
-        'user_delete': 'djoser.serializers.UserDeleteSerializer',
-        'user': 'djoser.serializers.UserSerializer',
-        'current_user': 'djoser.serializers.UserSerializer',
-        'token': 'djoser.serializers.TokenSerializer',
-        'token_create': 'djoser.serializers.TokenCreateSerializer',
-    },
-}
 SWAGGER_SETTINGS = {
     'DEFAULT_AUTO_SCHEMA_CLASS': 'lbs_backend.utils.CustomSwaggerAutoSchema',
+    'USE_SESSION_AUTH': False,
+    'SECURITY_DEFINITIONS': {
+        'Token': {
+            'type': 'apiKey',
+            'name': 'Authorization',
+            'in': 'header'
+        }
+    },
 }
 
 MIDDLEWARE = [

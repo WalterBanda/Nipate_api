@@ -111,7 +111,7 @@ class LoginJwtToken(APIView):
                 token, _ = Token.objects.get_or_create(user_id=user.id)
                 results = LoginResponseSerializer({
                     "MobileNumber": user.MobileNumber, "FirstName": user.FirstName,
-                    "Auth_token": token.key
+                    "Auth_token": 'Token ' + token.key
                 }, many=False)
                 return Response(results.data, status.HTTP_200_OK)
 
