@@ -21,27 +21,24 @@ class CreateProviderSerializer(serializers.Serializer):
 
 
 class ProviderServiceSerializer(serializers.ModelSerializer):
-    Provider = ProviderSerializer(read_only=True, source="providerID")
-    Service = ServiceSerializer(read_only=True, source="providerProductID")
-    Location = CenterLocationSerializer(source="providerLocation", read_only=True)
+    Provider = ProviderSerializer(read_only=True, source="ProviderID")
+    Service = ServiceSerializer(read_only=True, source="ProductID")
+    Location = CenterLocationSerializer(source="CenterLocationID", read_only=True)
 
     class Meta:
         model = ProviderService
         fields = [
-            "id", "Provider", "ProviderServiceName", "Service", "AgeBracket",
-            "Location", "workingDays"
+            "id", "Provider", "ProviderServiceName", "Service", "Longitude", "Lattitude",
+            "Location", "workingDays",  "AgeBracket",
         ]
 
 
-class CreateProviderServiceSerializer(serializers.Serializer):
-    ProviderID = serializers.IntegerField()
+class CreatePostProviderServiceSerializer(serializers.Serializer):
     ProviderServiceName = serializers.CharField()
     ProductID = serializers.IntegerField()
-    LocationID = serializers.CharField(allow_null=True, allow_blank=True)
-    GenderID = serializers.IntegerField(allow_null=True)
-    AgeBracket = serializers.CharField(default="All")
-    workingDays = serializers.ListField(
-        child=serializers.CharField(), allow_empty=True
-    )
-    Longitude = serializers.CharField(allow_null=True, allow_blank=True)
-    Lattitude = serializers.CharField(allow_null=True, allow_blank=True)
+
+
+class UpdateProviderServiceLocationSerializer(serializers.Serializer):
+    ServiceID = serializers.IntegerField()
+    Longitude = serializers.CharField(max_length=50)
+    Lattitude = serializers.CharField(max_length=50)

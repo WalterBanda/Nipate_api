@@ -1,14 +1,23 @@
+import requests
 from .models import ProviderService
-from locations.models import TownsModel
+from locations.models import CenterLocation
 
-def createProviderService(data):
-    service_obj, _ = ProviderService.objects.get_or_create(
-        UserID_id=data["ProviderID"], ProviderServiceName=data["ProviderServiceName"],
-        ProductID_id=data["ProductID"],
+
+def createProviderService(data, providerID):
+    provider_service, _ = ProviderService.objects.get_or_create(
+        ProviderID=providerID, ProviderServiceName=data["ProviderServiceName"],
+        ProductID_id=data["ProductID"]
     )
-    if data["LocationID"]:
-        try:
-            service_obj.LocationID_id = int(data["LocationID"])
-        except:
-            location, _ = TownsModel.objects.get_or_create(Name=data["LocationID"])
-            service_obj.LocationID_id = location.id
+    return provider_service
+
+
+def pinProviderServiceCenter(service):
+    headers, payload = {}, {}
+    url = "https://nominatim.openstreetmap.org/reverse?lat={}&lon={}&format=json"\
+        .format(service.Lattitude, service.Longitude)
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print(response.json())
+    print("\n")
+    center = CenterLocation.objects.filter(DisplayName=response.json()["display_name"]).first()
+    print(center)
+    return center
