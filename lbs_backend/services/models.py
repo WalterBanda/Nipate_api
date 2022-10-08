@@ -1,6 +1,9 @@
+import datetime
+
 from django.db import models
 from django.contrib.auth import get_user_model
 from users.models import Gender
+from locations.models import CountyModel
 
 UserModel = get_user_model()
 
@@ -40,3 +43,22 @@ class WorkingDays(models.Model):
 
     def __str__(self):
         return self.days
+
+
+class Advertisement(models.Model):
+    ADTitle = models.CharField(max_length=200, null=True, blank=True)
+    UserID = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    ServiceID = models.ManyToManyField(Service)
+    LocationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
+    GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
+    AdDescription = models.TextField()
+    StartDate = models.DateField(default=datetime.date.today)
+    ExpiryDate = models.DateField()
+    NoOfMessages = models.IntegerField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Advertisements"
+        verbose_name_plural = "Advertisements"
+
+    def __str__(self):
+        return str(self.ADTitle + " | " + str(self.ExpiryDate))

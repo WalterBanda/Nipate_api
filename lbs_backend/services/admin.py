@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import (
-    WorkingDays, ServiceCategory, Service
+    WorkingDays, ServiceCategory, Service, Advertisement
 )
 
 admin.site.register(ServiceCategory)
@@ -15,3 +15,10 @@ class ServiceAdmin(admin.ModelAdmin):
 class WorkingDaysAdmin(admin.ModelAdmin):
     list_display = ["id", "days"]
 
+
+@admin.register(Advertisement)
+class AdvertisementAdmin(admin.ModelAdmin):
+    list_display = [
+        "id", "ADTitle", "UserID", "LocationID", "AdDescription", "StartDate", "ExpiryDate",
+        "NoOfMessages"
+    ]

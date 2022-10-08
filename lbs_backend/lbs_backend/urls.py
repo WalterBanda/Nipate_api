@@ -6,40 +6,45 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 from drf_yasg.generators import OpenAPISchemaGenerator
-from users import views
-from django.contrib.staticfiles.storage import staticfiles_storage
-from django.views.generic.base import RedirectView
+# from users import views
+# from django.contrib.staticfiles.storage import staticfiles_storage
+# from django.views.generic.base import RedirectView
+
 
 class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
-  def get_schema(self, request=None, public=False):
-    """Generate a :class:`.Swagger` object with custom tags"""
+    def get_schema(self, request=None, public=False):
+        """Generate a :class:`.Swagger` object with custom tags"""
 
-    swagger = super().get_schema(request, public)
-    swagger.tags = [
-        {
-            "name": "User",
-            "description": "For using th API you need(mostly) to register as a user. Registering gives you all"
-                           " the the non admin access endpoints. After Registration you need to get your JWT access token "
-                           "to send requests to the API endpoints"
-        },
-        {
-            "name": "Provider",
-            "description": "Provider Endpoints For handling their Functionalities"
-        }
-    ]
+        swagger = super().get_schema(request, public)
+        swagger.tags = [
+            {
+                "name": "User",
+                "description": "For using th API you need(mostly) to register as a user. Registering gives you all"
+                               " the the non admin access endpoints. After Registration you need to get your JWT access token "
+                               "to send requests to the API endpoints"
+            },
+            {
+                "name": "Provider",
+                "description": "Provider Endpoints For handling their Functionalities"
+            },
+            {
+                "name": "Services",
+                "description": "Services Endpoints: Categories, Services, Products, Advertisements Api's"
+            }
+        ]
 
-    return swagger
+        return swagger
+
 
 admin.site.site_header = "Location Based Mobile Advertising System Database "
 admin.site.index_title = "Applications"
 
-
 schema_view = get_schema_view(
-   openapi.Info(
-      title="Nipate data source and API", default_version='v1.0', description="LBS APIs Doc",
-      terms_of_service="https://www.google.com/policies/terms/", contact=openapi.Contact(email="amosditto@gmail.com"),
-      license=openapi.License(name="BSD License"),
-   ), public=True, permission_classes=[permissions.AllowAny], generator_class=CustomOpenAPISchemaGenerator,
+    openapi.Info(
+        title="Nipate data source and API", default_version='v1.0', description="LBS APIs Doc",
+        terms_of_service="https://www.google.com/policies/terms/", contact=openapi.Contact(email="amosditto@gmail.com"),
+        license=openapi.License(name="BSD License"),
+    ), public=True, permission_classes=[permissions.AllowAny], generator_class=CustomOpenAPISchemaGenerator,
 )
 urlpatterns = [
     # default project urls

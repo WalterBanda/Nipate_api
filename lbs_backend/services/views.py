@@ -7,17 +7,17 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from .models import (
-    ServiceCategory, Service
+    ServiceCategory, Service, Advertisement
 )
 from .serializers import (
-    ServiceCategorySerailizer, ServiceSerializer, InverseCategorySerializer
+    ServiceCategorySerailizer, ServiceSerializer, InverseCategorySerializer, AdvertisementSerializer
 )
 
 
 # Product Views
 class ServicesCategoryView(APIView):
 
-    @swagger_auto_schema(operation_description='get all product categories',
+    @swagger_auto_schema(tags=["Services"], operation_description='get all product categories',
                          responses={200: ServiceCategorySerailizer(many=True)})
     def get(self, request):
         obj = ServiceCategory.objects.all()
@@ -32,7 +32,7 @@ class ServicesView(APIView):
     CategoryID = openapi.Parameter('CategoryID', openapi.IN_QUERY,
                                    description='search by CategoryID', type=openapi.TYPE_INTEGER)
 
-    @swagger_auto_schema(operation_description='get products endpoint', manual_parameters=[CategoryID, Name],
+    @swagger_auto_schema(tags=["Services"], operation_description='get products endpoint', manual_parameters=[CategoryID, Name],
                          responses={200: ServiceSerializer(many=True)})
     def get(self, request):
         data = request.query_params
@@ -54,7 +54,7 @@ class ServicesView(APIView):
 
 class AllServicesView(APIView):
 
-    @swagger_auto_schema(operation_description="Endpoint for finding All services",
+    @swagger_auto_schema(tags=["Services"], operation_description="Endpoint for finding All services",
                          responses={200: InverseCategorySerializer(many=True)})
     def get(self, request):
         products = ServiceCategory.objects.all()
@@ -73,3 +73,11 @@ class RequestPagination(PageNumberPagination):
 #         responses={200: openapi.Response(
 #             description='paginated Services Providers', schema=ServiceProviderSerializer(many=True)
 #         )}, paginator=RequestPagination())
+
+
+class AdvertisementView(APIView):
+    @swagger_auto_schema(tags=["Services"], operation_description="Advertisement CRUD Endpoints",
+                         responses={200: AdvertisementSerializer(many=True)})
+    def get(self, request):
+        ads_obj = Advertisement.objects.all()
+        return Response(AdvertisementSerializer(ads_obj, many=True).data, status.HTTP_200_OK)
