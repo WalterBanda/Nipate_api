@@ -99,7 +99,7 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
 DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE")
-
+print("The DEVELOPMENT_MODE: ", DEVELOPMENT_MODE)
 if DEVELOPMENT_MODE:
     DATABASES = {
         'default': {
