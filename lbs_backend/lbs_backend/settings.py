@@ -1,18 +1,23 @@
 import os
 import sys
 import dj_database_url
+from urllib.parse import urlparse
 from pathlib import Path
 from dotenv import load_dotenv
+import environ
 
+env = environ.Env()
+environ.Env.read_env()
+
+# print("Environs: ", os.environ)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # dotenv_path = os.path.join(BASE_DIR, ".env")
 # load_dotenv(dotenv_path)
 
-SECRET_KEY = os.getenv('SECRET_KEY')
-
-DEBUG = os.getenv("DEBUG")
+SECRET_KEY = env('SECRET_KEY', default='foo')
+DEBUG = env("DEBUG", default="False") == "True"
 
 ALLOWED_HOSTS = ['*']
 
@@ -98,8 +103,10 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE")
+DEVELOPMENT_MODE = env("DEVELOPMENT_MODE", default="False") == "True"
 print("The DEVELOPMENT_MODE: ", DEVELOPMENT_MODE)
+
+
 if DEVELOPMENT_MODE:
     DATABASES = {
         'default': {
@@ -107,12 +114,20 @@ if DEVELOPMENT_MODE:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-elif len(sys.argv) > 0 and sys.argv[1] != 'collectstatic':
-    if os.getenv("DATABASE_URL", None) is None:
-        raise Exception("DATABASE_URL environment variable not defined")
+else:
+    r = urlparse(env("DATABASE_URL"))
     DATABASES = {
-        "default": dj_database_url.parse(os.environ.get("DATABASE_URL")),
+        "default": {
+            "ENGINE": "django.db.backends.postgresql_psycopg2",
+            "NAME": os.path.relpath(r.path, "/"),
+            "USER": r.username,
+            "PASSWORD": r.password,
+            "HOST": r.hostname,
+            "PORT": r.port,
+            "OPTIONS": {"sslmode": "require"},
+        }
     }
+
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
