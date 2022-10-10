@@ -2,13 +2,17 @@ import os
 import sys
 import dj_database_url
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
+from dotenv import load_dotenv
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = os.getenv('SECRET_KEY', get_random_secret_key())
+dotenv_path = os.path.join(BASE_DIR, ".env")
+load_dotenv(dotenv_path)
 
-DEBUG = os.getenv("DEBUG", "True") == "True"
+SECRET_KEY = os.getenv('SECRET_KEY')
+
+DEBUG = os.getenv("DEBUG")
 
 ALLOWED_HOSTS = ['*']
 
@@ -94,9 +98,9 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
-DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE", "True") == "True"
+DEVELOPMENT_MODE = os.getenv("DEVELOPMENT_MODE")
 
-if DEVELOPMENT_MODE is True:
+if DEVELOPMENT_MODE:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
