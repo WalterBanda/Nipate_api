@@ -98,7 +98,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'lbs_backend.wsgi.application'
 
 DEVELOPMENT_MODE = os.environ.get("DEVELOPMENT_MODE", "False") == "True"
-print("The DEVELOPMENT_MODE: ", DEVELOPMENT_MODE)
 
 
 # if DEVELOPMENT_MODE:

@@ -62,6 +62,7 @@ class CreateAuthToken(serializers.Serializer):
 class LoginResponseSerializer(serializers.Serializer):
     MobileNumber = serializers.CharField()
     FirstName = serializers.CharField()
+    LastName = serializers.CharField()
     Auth_token = serializers.CharField()
 
 

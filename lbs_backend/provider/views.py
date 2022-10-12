@@ -33,7 +33,9 @@ class ProviderView(APIView):
     def post(self, request):
         serializer = CreateProviderSerializer(data=request.data)
         if serializer.is_valid():
-            provider, _ = ProviderModel.objects.get_or_create(UserID=request.user, CountyID_id=request.data["CountyID"])
+            provider, _ = ProviderModel.objects.get_or_create(UserID=request.user)
+            provider.CountyID_id = request.data["CountyID"]
+            provider.save()
             return Response(ProviderSerializer(provider, many=False).data, status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -74,11 +76,12 @@ class ProviderServiceView(APIView):
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
-@swagger_auto_schema(tags=["Provider"], method="PUT",
-                     operation_description="Update Provider Created Service <br> User request must be "
-                                           "Authenticated with Token header",
-                     request_body=UpdateProviderServiceLocationSerializer(),
-                     responses={200: ProviderServiceSerializer(many=False)})
+@swagger_auto_schema(
+    tags=["Provider"], method="PUT",
+    operation_description="Update Provider Created Service <br> User request must be Authenticated with Token header",
+    request_body=UpdateProviderServiceLocationSerializer(),
+    responses={200: ProviderServiceSerializer(many=False)}
+)
 @api_view(["PUT"])
 @permission_classes([permissions.IsAuthenticated])
 def updateProviderServiceLocation(request, format=None):
@@ -95,3 +98,20 @@ def updateProviderServiceLocation(request, format=None):
             return Response({"Error": "Service Doesn't Exists"}, status.HTTP_404_NOT_FOUND)
     else:
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+
+@swagger_auto_schema(
+    tags=['Provider'], method="GET", operation_description="Confirm If User is Provider",
+    responses={200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"Provider": True}])}
+)
+@api_view(["GET"])
+@permission_classes([permissions.IsAuthenticated])
+def checkProviderStatus(request):
+    if request.user:
+        provider = ProviderModel.objects.filter(UserID=request.user).first()
+        if provider:
+            return Response({"Provider": True}, status.HTTP_200_OK)
+        else:
+            return Response({"Provider": False}, status.HTTP_200_OK)
+    else:
+        return Response({"Provider": False}, status.HTTP_400_BAD_REQUEST)

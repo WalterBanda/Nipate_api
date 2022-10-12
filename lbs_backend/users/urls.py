@@ -6,5 +6,6 @@ urlpatterns = [
     re_path('^register', views.UserRegister.as_view(), name='register'),
     re_path('^logout', views.LogOutJwtToken.as_view(), name="logout"),
     re_path(r'^user-details', views.FetchUserDetail.as_view(), name='alldetails'),
+    re_path(r'^confirm', views.ConfirmUser.as_view(), name='confirm_user'),
 ]
 # urlpatterns += router.urls

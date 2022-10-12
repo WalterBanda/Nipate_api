@@ -2,7 +2,7 @@ from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from drf_yasg.utils import swagger_auto_schema
+from drf_yasg.utils import swagger_auto_schema, OrderedDict
 from django.contrib.auth import get_user_model
 from drf_yasg import openapi
 from django.conf import settings
@@ -70,7 +70,7 @@ class UserRegister(APIView):
                 token, _ = Token.objects.get_or_create(user=user)
 
                 results = LoginResponseSerializer({
-                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName,
+                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
                     "Auth_token": token.key
                 }, many=False)
 
@@ -110,7 +110,7 @@ class LoginJwtToken(APIView):
             try:
                 token, _ = Token.objects.get_or_create(user_id=user.id)
                 results = LoginResponseSerializer({
-                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName,
+                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
                     "Auth_token": 'Token ' + token.key
                 }, many=False)
                 return Response(results.data, status.HTTP_200_OK)
@@ -149,3 +149,22 @@ class FetchUserDetail(APIView):
             return Response(AllDetailSerializer(request.user, many=False).data, status.HTTP_200_OK)
         else:
             return Response({"Error": "User not Authenticated"}, status.HTTP_401_UNAUTHORIZED)
+
+
+class ConfirmUser(APIView):
+
+    @swagger_auto_schema(tags=['User'],
+                         operation_description="Confirm If User Credentials is Valid",
+                         responses={
+                             200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"User": True}])
+                         }
+                         )
+    def get(self, request):
+        if request.user:
+            token = Token.objects.filter(user=request.user).first()
+            if token:
+                return Response({"User": True}, status.HTTP_200_OK)
+            else:
+                return Response({"User": False}, status.HTTP_404_NOT_FOUND)
+        else:
+            return Response({"User": False}, status.HTTP_404_NOT_FOUND)
