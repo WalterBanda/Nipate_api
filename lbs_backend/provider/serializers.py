@@ -28,17 +28,19 @@ class ProviderServiceSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProviderService
         fields = [
-            "id", "Provider", "ProviderServiceName", "Service", "Longitude", "Lattitude",
+            "id", "Provider", "ServiceTitle", "Service", "ServiceDescription", "Longitude", "Lattitude",
             "Location", "workingDays",  "AgeBracket",
         ]
 
 
 class CreatePostProviderServiceSerializer(serializers.Serializer):
-    ProviderServiceName = serializers.CharField()
+    ServiceTitle = serializers.CharField()
     ProductID = serializers.IntegerField()
+    ServiceDescription = serializers.CharField(allow_null=True, allow_blank=True)
 
 
 class UpdateProviderServiceLocationSerializer(serializers.Serializer):
     ServiceID = serializers.IntegerField()
     Longitude = serializers.CharField(max_length=50)
     Lattitude = serializers.CharField(max_length=50)
+

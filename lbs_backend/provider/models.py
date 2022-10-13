@@ -27,10 +27,11 @@ class ProviderService(models.Model):
         ('10+', '10+'), ('16+', '16+'),
     ]
     ProviderID = models.ForeignKey(ProviderModel, on_delete=models.CASCADE, related_name="providerID")
-    ProviderServiceName = models.CharField(max_length=250)
+    ServiceTitle = models.CharField(max_length=250)
     ProductID = models.ForeignKey(Service, on_delete=models.PROTECT, related_name="providerProductID")
     CenterLocationID = models.ForeignKey(CenterLocation, on_delete=models.PROTECT, null=True, blank=True,
                                          related_name="providerLocation")
+    ServiceDescription = models.TextField(null=True, blank=True)
     GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True,
                                  related_name="providerGenders")
     AgeBracket = models.CharField(max_length=9, choices=AGE, null=True, blank=True)

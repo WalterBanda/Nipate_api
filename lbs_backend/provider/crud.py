@@ -3,11 +3,14 @@ from .models import ProviderService
 from locations.models import CenterLocation
 
 
-def createProviderService(data, providerID):
+def createProviderService(data, provider_id):
     provider_service, _ = ProviderService.objects.get_or_create(
-        ProviderID=providerID, ProviderServiceName=data["ProviderServiceName"],
-        ProductID_id=data["ProductID"]
+        ProviderID=provider_id, ProductID_id=data["ProductID"]
     )
+    provider_service.ServiceTitle = data["ServiceTitle"]
+    provider_service.ServiceDescription = data["ServiceDescription"]
+    provider_service.save()
+
     return provider_service
 
 
