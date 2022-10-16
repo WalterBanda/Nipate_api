@@ -33,14 +33,30 @@ class ProviderView(APIView):
 
     @swagger_auto_schema(tags=["Provider"], operation_description="Create New Provider Account",
                          request_body=CreateProviderSerializer(),
-                         responses={201: ProviderSerializer(many=False)})
+                         responses={201: UserStatusSerializer(many=False)})
     def post(self, request):
         serializer = CreateProviderSerializer(data=request.data)
         if serializer.is_valid():
             provider, _ = ProviderModel.objects.get_or_create(UserID=request.user)
             provider.CountyID_id = request.data["CountyID"]
             provider.save()
-            return Response(ProviderSerializer(provider, many=False).data, status.HTTP_201_CREATED)
+
+            details = {
+                "id": provider.id,
+                "User": {
+                    "id": provider.UserID.id,
+                    "MobileNumber": provider.UserID.MobileNumber,
+                    "IDNumber": provider.UserID.IDNumber,
+                    "FirstName": provider.UserID.FirstName,
+                    "SurName": provider.UserID.SurName
+                },
+                "Location": {
+                    "id": provider.CountyID.id,
+                    "Name": provider.CountyID.Name
+                },
+                "Provider": True
+            }
+            return Response(details, status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
