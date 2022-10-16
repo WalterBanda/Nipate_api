@@ -29,7 +29,7 @@ class ProviderServiceSerializer(serializers.ModelSerializer):
         model = ProviderService
         fields = [
             "id", "Provider", "ServiceTitle", "Service", "ServiceDescription", "Longitude", "Lattitude",
-            "Location", "workingDays",  "AgeBracket",
+            "Location", "workingDays", "AgeBracket",
         ]
 
 
@@ -37,10 +37,18 @@ class CreatePostProviderServiceSerializer(serializers.Serializer):
     ServiceTitle = serializers.CharField()
     ProductID = serializers.IntegerField()
     ServiceDescription = serializers.CharField(allow_null=True, allow_blank=True)
+    Longitude = serializers.CharField(max_length=50)
+    Lattitude = serializers.CharField(max_length=50)
+    CenterLocationID = serializers.IntegerField()
 
 
-class UpdateProviderServiceLocationSerializer(serializers.Serializer):
-    ServiceID = serializers.IntegerField()
+class SearchCenterLocationSerializer(serializers.Serializer):
     Longitude = serializers.CharField(max_length=50)
     Lattitude = serializers.CharField(max_length=50)
 
+
+class UserStatusSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
+    User = UserModelSerializer(many=False)
+    Location = CountyModelSerializers(many=False)
+    Provider = serializers.BooleanField()

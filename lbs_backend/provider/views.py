@@ -5,12 +5,16 @@ from rest_framework.decorators import api_view, permission_classes
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
+from django.contrib.auth import get_user_model
 from .models import ProviderModel, ProviderService
 from .serializers import (
     ProviderSerializer, ProviderServiceSerializer, CreatePostProviderServiceSerializer,
-    CreateProviderSerializer, UpdateProviderServiceLocationSerializer
+    CreateProviderSerializer, SearchCenterLocationSerializer, UserStatusSerializer
 )
 from .crud import createProviderService, pinProviderServiceCenter
+from locations.serializers import CenterLocationSerializer
+
+User = get_user_model()
 
 
 # Create or Register New Provider
@@ -77,41 +81,65 @@ class ProviderServiceView(APIView):
 
 
 @swagger_auto_schema(
-    tags=["Provider"], method="PUT",
-    operation_description="Update Provider Created Service <br> User request must be Authenticated with Token header",
-    request_body=UpdateProviderServiceLocationSerializer(),
-    responses={200: ProviderServiceSerializer(many=False)}
+    tags=["Provider"], method="POST",
+    operation_description="Search Location where user is currently located at.",
+    request_body=SearchCenterLocationSerializer(),
+    responses={200: CenterLocationSerializer(many=False)}
 )
-@api_view(["PUT"])
-@permission_classes([permissions.IsAuthenticated])
-def updateProviderServiceLocation(request, format=None):
-    serializer = UpdateProviderServiceLocationSerializer(data=request.data)
+@api_view(["POST"])
+def searchCenterLocation(request):
+    serializer = SearchCenterLocationSerializer(data=request.data)
     if serializer.is_valid():
-        service = ProviderService.objects.filter(id=request.data["ServiceID"]).first()
-        if service:
-            service.Longitude = request.data["Longitude"]
-            service.Lattitude = request.data["Lattitude"]
-            service.CenterLocationID = pinProviderServiceCenter(service)
-            service.save()
-            return Response(ProviderServiceSerializer(service, many=False).data, status.HTTP_200_OK)
-        else:
-            return Response({"Error": "Service Doesn't Exists"}, status.HTTP_404_NOT_FOUND)
-    else:
-        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+        center = pinProviderServiceCenter(lattitude=request.data["Lattitude"], longitude=request.data["Longitude"])
+        return Response(CenterLocationSerializer(center, many=False).data, status.HTTP_200_OK)
+
+    return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(
-    tags=['Provider'], method="GET", operation_description="Confirm If User is Provider",
-    responses={200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"Provider": True}])}
+    tags=['Provider'], method="GET", operation_description="Confirm If User is `Client/Provider`",
+    responses={200: UserStatusSerializer(many=False)}
 )
 @api_view(["GET"])
 @permission_classes([permissions.IsAuthenticated])
 def checkProviderStatus(request):
     if request.user:
+
         provider = ProviderModel.objects.filter(UserID=request.user).first()
         if provider:
-            return Response({"Provider": True}, status.HTTP_200_OK)
+            details = {
+                "id": provider.id,
+                "User": {
+                    "id": provider.UserID.id,
+                    "MobileNumber": provider.UserID.MobileNumber,
+                    "IDNumber": provider.UserID.IDNumber,
+                    "FirstName": provider.UserID.FirstName,
+                    "SurName": provider.UserID.SurName
+                },
+                "Location": {
+                    "id": provider.CountyID.id,
+                    "Name": provider.CountyID.Name
+                },
+                "Provider": True
+            }
+            return Response(details, status.HTTP_200_OK)
         else:
-            return Response({"Provider": False}, status.HTTP_200_OK)
+            user = request.user
+            details = {
+                "id": user.id,
+                "User": {
+                    "id": user.id,
+                    "MobileNumber": user.MobileNumber,
+                    "IDNumber": user.IDNumber,
+                    "FirstName": user.FirstName,
+                    "SurName": user.SurName
+                },
+                "Location": {
+                    "id": user.LocationID.id,
+                    "Name": user.LocationID.Name
+                },
+                "Provider": False
+            }
+            return Response(details, status.HTTP_200_OK)
     else:
-        return Response({"Provider": False}, status.HTTP_400_BAD_REQUEST)
+        return Response({"message": "Credentials are invalid"}, status.HTTP_400_BAD_REQUEST)

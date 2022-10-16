@@ -18,7 +18,7 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            "id", "MobileNumber", "IDNumber", "FirstName"
+            "id", "MobileNumber", "IDNumber", "FirstName", "SurName"
         ]
 
     @staticmethod

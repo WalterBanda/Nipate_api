@@ -5,19 +5,22 @@ from locations.models import CenterLocation
 
 def createProviderService(data, provider_id):
     provider_service, _ = ProviderService.objects.get_or_create(
-        ProviderID=provider_id, ProductID_id=data["ProductID"]
+        ProviderID=provider_id, ProductID_id=data["ProductID"],
     )
     provider_service.ServiceTitle = data["ServiceTitle"]
     provider_service.ServiceDescription = data["ServiceDescription"]
+    provider_service.Longitude = data["Longitude"]
+    provider_service.Lattitude = data["Lattitude"]
+    provider_service.CenterLocationID_id = data["CenterLocationID"]
     provider_service.save()
 
     return provider_service
 
 
-def pinProviderServiceCenter(service):
+def pinProviderServiceCenter(lattitude, longitude):
     headers, payload = {}, {}
     url = "https://nominatim.openstreetmap.org/reverse?lat={}&lon={}&format=json" \
-        .format(service.Lattitude, service.Longitude)
+        .format(lattitude, longitude)
     response = requests.request("GET", url, headers=headers, data=payload)
 
     center = CenterLocation.objects.filter(DisplayName=response.json()["display_name"]).first()
