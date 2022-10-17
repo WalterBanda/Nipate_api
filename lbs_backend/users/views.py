@@ -71,7 +71,7 @@ class UserRegister(APIView):
 
                 results = LoginResponseSerializer({
                     "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
-                    "Auth_token": token.key
+                    "Auth_token": 'Token ' + token.key
                 }, many=False)
 
                 return Response(results.data, status=status.HTTP_201_CREATED)
