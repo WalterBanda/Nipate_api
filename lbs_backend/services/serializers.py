@@ -1,4 +1,5 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, Serializer
+from rest_framework import serializers
 from .models import (
     WorkingDays, ServiceCategory, Service, Advertisement
 )
@@ -50,3 +51,13 @@ class AdvertisementSerializer(ModelSerializer):
             "id", "ADTitle", "User", "Service", "Location", "AdDescription", "StartDate", "ExpiryDate",
             "NoOfMessages"
         ]
+
+
+class CreateAdvertSerializer(Serializer):
+    ADTitle = serializers.CharField()
+    UserID = serializers.IntegerField()
+    ServiceID = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
+    LocationID = serializers.IntegerField()
+    AdDescription = serializers.CharField(allow_blank=True)
+    StartDate = serializers.DateField(allow_null=True)
+    ExpiryDate = serializers.DateField()

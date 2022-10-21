@@ -20,8 +20,8 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
             {
                 "name": "User",
                 "description": "For using th API you need(mostly) to register as a user. Registering gives you all"
-                               " the the non admin access endpoints. After Registration you need to get your JWT access token "
-                               "to send requests to the API endpoints"
+                               "the the non admin access endpoints. After Registration you need to get your JWT "
+                               "access token to send requests to the API endpoints"
             },
             {
                 "name": "Provider",
@@ -30,7 +30,19 @@ class CustomOpenAPISchemaGenerator(OpenAPISchemaGenerator):
             {
                 "name": "Services",
                 "description": "Services Endpoints: Categories, Services, Products, Advertisements Api's"
-            }
+            },
+            {
+                "name": "Services Requests",
+                "description": "Services Requests Endpoints: Find service you need done and make a request"
+            },
+            {
+                "name": "Location",
+                "description": "Location link to services: Regions/Counties, Centers"
+            },
+            {
+                "name": "Advertisements",
+                "description": "Advertise your Services/Products endpoints"
+            },
         ]
 
         return swagger

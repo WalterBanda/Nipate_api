@@ -54,7 +54,7 @@ class Advertisement(models.Model):
     ServiceID = models.ManyToManyField(Service)
     LocationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
     GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
-    AdDescription = models.TextField()
+    AdDescription = models.TextField(null=True, blank=True)
     StartDate = models.DateField(default=datetime.date.today)
     ExpiryDate = models.DateField()
     NoOfMessages = models.IntegerField(null=True, blank=True)

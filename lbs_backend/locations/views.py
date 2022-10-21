@@ -10,7 +10,7 @@ from .serializers import CountyModelSerializers, CenterLocationSerializer
 
 class CountyView(APIView):
 
-    @swagger_auto_schema(operation_description="Endpoint for getting counties",
+    @swagger_auto_schema(tags=['Location'], operation_description="Endpoint for getting counties",
                          responses={200: CountyModelSerializers(many=True)})
     def get(self, request):
         counties = CountyModel.objects.all()
