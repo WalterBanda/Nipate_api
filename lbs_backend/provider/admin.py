@@ -4,12 +4,12 @@ from .models import ProviderModel, ProviderService, ServiceRequest, ServiceRespo
 
 @admin.register(ProviderModel)
 class ProviderAdmin(admin.ModelAdmin):
-    list_display = ['UserID', 'CountyID']
+    list_display = ['id', 'UserID', 'CountyID']
 
 
 @admin.register(ProviderService)
 class ProviderServiceAdmin(admin.ModelAdmin):
-    list_display = ['ServiceTitle', 'ProviderID', 'ProductID', 'CenterLocationID']
+    list_display = ['id', 'ServiceTitle', 'ProviderID', 'ProductID', 'CenterLocationID']
 
 
 @admin.register(ServiceRequest)
