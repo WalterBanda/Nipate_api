@@ -46,7 +46,7 @@ class ProviderService(models.Model):
         ordering = ['TimeStamp']
 
     def __str__(self):
-        return "{} | {}".format(str(self.ProviderID), self.ProviderServiceName)
+        return "{} | {}".format(str(self.ProviderID), self.ServiceTitle)
 
 
 class ServiceRequest(models.Model):
