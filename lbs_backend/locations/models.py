@@ -25,5 +25,5 @@ class CenterLocation(models.Model):
         verbose_name = "Center Locations"
         verbose_name_plural = "Center Locations"
 
-    def str(self):
+    def __str__(self):
         return self.DisplayName

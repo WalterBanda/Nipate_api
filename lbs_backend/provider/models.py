@@ -17,7 +17,7 @@ class ProviderModel(models.Model):
         verbose_name_plural = "Service Providers"
         ordering = ['TimeStamp']
 
-    def str(self):
+    def __str__(self):
         return str(self.UserID)
 
 
@@ -45,5 +45,37 @@ class ProviderService(models.Model):
         verbose_name_plural = "Provider Services"
         ordering = ['TimeStamp']
 
-    def str(self):
+    def __str__(self):
         return "{} | {}".format(str(self.ProviderID), self.ProviderServiceName)
+
+
+class ServiceRequest(models.Model):
+    UserID = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_requesting')
+    ProviderServiceID = models.ForeignKey(ProviderService, on_delete=models.CASCADE)
+    CenterLocationID = models.ForeignKey(CenterLocation, on_delete=models.DO_NOTHING, blank=True, null=True)
+    Latitude = models.CharField(max_length=50, blank=True, null=True)
+    Longitude = models.CharField(max_length=50, blank=True, null=True)
+    TimeStamp = models.DateTimeField(auto_now_add=True)
+    RequestText = models.TextField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = "Services Requests"
+        verbose_name_plural = "Services Requests"
+        ordering = ['TimeStamp']
+
+    def __str__(self):
+        return self.UserID.FirstName + " | " + self.ProviderServiceID.ServiceTitle
+
+
+class ServiceResponse(models.Model):
+    ServiceRequestID = models.ForeignKey(ServiceRequest, on_delete=models.CASCADE)
+    ResponseText = models.TextField(null=True, blank=True)
+    TimeStamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = "Services Responses"
+        verbose_name_plural = "Services Responses"
+        ordering = ['TimeStamp']
+
+    def __str__(self):
+        return str(self.ServiceRequestID)

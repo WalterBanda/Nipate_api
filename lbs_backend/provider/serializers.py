@@ -1,5 +1,7 @@
+from abc import ABC
+
 from rest_framework import serializers
-from .models import ProviderModel, ProviderService
+from .models import ProviderModel, ProviderService, ServiceResponse, ServiceRequest
 from users.serializers import UserModelSerializer
 from services.serializers import ServiceSerializer
 from locations.serializers import CenterLocationSerializer, CountyModelSerializers
@@ -52,3 +54,38 @@ class UserStatusSerializer(serializers.Serializer):
     User = UserModelSerializer(many=False)
     Location = CountyModelSerializers(many=False)
     Provider = serializers.BooleanField()
+
+
+class ServiceRequestSerializer(serializers.ModelSerializer):
+    User = UserModelSerializer(read_only=True, source="UserID", many=False)
+    Service = ProviderServiceSerializer(source="ProviderServiceID", many=False)
+    CenterLocation = CenterLocationSerializer(source="CenterLocationID", many=False)
+
+    class Meta:
+        model = ServiceRequest
+        fields = [
+            "id", "User", "Service", "CenterLocation", "TimeStamp", "RequestText", "Latitude", "Longitude"
+        ]
+
+
+class ServiceResponseSerializer(serializers.ModelSerializer):
+    Request = ServiceRequestSerializer(source="ServiceRequestID", many=False)
+
+    class Meta:
+        model = ServiceResponse
+        fields = [
+            "id", "Request", "ResponseText", "TimeStamp"
+        ]
+
+
+class CreateServiceRequestSerializer(serializers.Serializer):
+    ProviderServiceID = serializers.IntegerField()
+    RequestText = serializers.CharField(allow_null=True)
+    CenterLocationID = serializers.IntegerField(allow_null=True)
+    Latitude = serializers.CharField(allow_null=True)
+    Longitude = serializers.CharField(allow_null=True)
+
+
+class CreateServiceResponseSerializer(serializers.Serializer):
+    ServiceRequestID = serializers.IntegerField()
+    ResponseText = serializers.CharField(allow_null=True)

@@ -27,6 +27,9 @@ class Service(models.Model):
         verbose_name = "Services"
         verbose_name_plural = "Services"
 
+    def __str__(self):
+        return self.Name
+
 
 class WorkingDays(models.Model):
     DAYS_OF_WEEK = [
