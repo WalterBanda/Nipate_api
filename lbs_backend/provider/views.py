@@ -6,10 +6,12 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
 from django.contrib.auth import get_user_model
+from django.db.models import Q
 from .models import ProviderModel, ProviderService
 from .serializers import (
     ProviderSerializer, ProviderServiceSerializer, CreatePostProviderServiceSerializer,
-    CreateProviderSerializer, SearchCenterLocationSerializer, UserStatusSerializer
+    CreateProviderSerializer, SearchCenterLocationSerializer, UserStatusSerializer,
+    SearchServiceSerializer
 )
 from .crud import createProviderService, pinProviderServiceCenter
 from locations.serializers import CenterLocationSerializer
@@ -97,12 +99,36 @@ class ProviderServiceView(APIView):
 
 
 @swagger_auto_schema(
+    tags=["Services"], method="POST",
+    operation_description="Search for services",
+    request_body=SearchServiceSerializer,
+    responses={200: ProviderServiceSerializer(many=True)}
+)
+@permission_classes([permissions.AllowAny])
+@api_view(["POST"])
+def searchProviderServices(request):
+    data = request.data
+
+    service_obj = ProviderService.objects.filter(
+        Q(ServiceTitle__icontains=data["searchdata"]) | Q(CenterLocationID__DisplayName__icontains=data["searchdata"])
+    )
+
+    if data["ServiceCategory"] != "" or data["ServiceCategory"] is not None:
+        service_obj = service_obj.filter(ProductID__CategoryID__Name__icontains=data["ServiceCategory"])
+    if data["Region"] != "" or data["Region"] is not None:
+        service_obj = service_obj.filter(ProviderID__CountyID__Name__icontains=data["Region"])
+
+    return Response(ProviderServiceSerializer(service_obj, many=True).data, status.HTTP_200_OK)
+
+
+@swagger_auto_schema(
     tags=["Provider"], method="POST",
     operation_description="Search Location where user is currently located at.",
     request_body=SearchCenterLocationSerializer(),
     responses={200: CenterLocationSerializer(many=False)}
 )
 @api_view(["POST"])
+@permission_classes([permissions.AllowAny])
 def searchCenterLocation(request):
     serializer = SearchCenterLocationSerializer(data=request.data)
     if serializer.is_valid():
@@ -159,6 +185,3 @@ def checkProviderStatus(request):
             return Response(details, status.HTTP_200_OK)
     else:
         return Response({"message": "Credentials are invalid"}, status.HTTP_400_BAD_REQUEST)
-
-
-

@@ -80,12 +80,18 @@ class ServiceResponseSerializer(serializers.ModelSerializer):
 
 class CreateServiceRequestSerializer(serializers.Serializer):
     ProviderServiceID = serializers.IntegerField()
-    RequestText = serializers.CharField(allow_null=True)
+    RequestText = serializers.CharField(allow_blank=True, allow_null=True)
     CenterLocationID = serializers.IntegerField(allow_null=True)
-    Latitude = serializers.CharField(allow_null=True)
-    Longitude = serializers.CharField(allow_null=True)
+    Latitude = serializers.CharField(allow_blank=True, allow_null=True)
+    Longitude = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class CreateServiceResponseSerializer(serializers.Serializer):
     ServiceRequestID = serializers.IntegerField()
-    ResponseText = serializers.CharField(allow_null=True)
+    ResponseText = serializers.CharField(allow_blank=True, allow_null=True)
+
+
+class SearchServiceSerializer(serializers.Serializer):
+    searchdata = serializers.CharField()
+    ServiceCategory = serializers.CharField(allow_blank=True)
+    Region = serializers.CharField(allow_blank=True)

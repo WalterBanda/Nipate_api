@@ -7,7 +7,12 @@ urlpatterns = [
     re_path('^category', views.ServicesCategoryView.as_view(), name='categories'),
     re_path('^services', views.ServicesView.as_view(), name='services'),
     re_path('^allservices', views.AllServicesView.as_view(), name="allproducts"),
+
+    # Ads
     re_path('^advert', views.AdvertisementView.as_view(), name="adverts"),
+    re_path('^advert/search', views.getAdvertByRegion, name="search_ad"),
+
+    # Requests
     re_path('^request', views.ServiceRequestView.as_view(), name="request"),
     re_path('^response', views.ServiceResponseView.as_view(), name="responses"),
     re_path('^request/provider', views.getRequestsByProvider, name="get_requests_provider"),

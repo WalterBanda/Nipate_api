@@ -111,6 +111,26 @@ class AdvertisementView(APIView):
             return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
+region = openapi.Parameter("region", in_=openapi.IN_QUERY, description="search by `region/county`", required=False,
+                           type=openapi.TYPE_STRING)
+
+
+@swagger_auto_schema(
+    tags=['Advertisements'], method="GET", operation_description="GET Adverts Request by `Region`",
+    manual_parameters=[region], responses={200: AdvertisementSerializer(many=True)}
+)
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def getAdvertByRegion(request):
+    params = request.query_params
+    if "region" in params:
+        adverts = Advertisement.objects.filter(LocationID__Name__icontains=params["region"])
+        return Response(AdvertisementSerializer(adverts, many=True).data, status.HTTP_200_OK)
+    else:
+        adverts = Advertisement.objects.all()
+        return Response(AdvertisementSerializer(adverts, many=True).data, status.HTTP_200_OK)
+
+
 class ServiceRequestView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

@@ -7,4 +7,5 @@ urlpatterns = [
     re_path(r'^service', views.ProviderServiceView.as_view(), name="services"),
     re_path(r'^search-location', views.searchCenterLocation, name="search_location"),
     re_path(r'^status', views.checkProviderStatus, name="provider"),
+    re_path('^find', views.searchProviderServices, name="search_services"),
 ]
