@@ -208,7 +208,7 @@ def getRequestsByClient(request):
 def getRequestNotRespondedByUser(request):
     if request.user:
         services_request = ServiceRequest.objects.filter(
-            ProviderServiceID__ProviderID__UserID=request.user, serviceresponse__isnull=True
+            UserID=request.user, serviceresponse__isnull=True
         )
 
         return Response(ServiceRequestSerializer(services_request, many=True).data, status.HTTP_200_OK)
@@ -225,11 +225,15 @@ def getRequestNotRespondedByUser(request):
 @permission_classes([permissions.IsAuthenticated])
 def getRequestNotRespondedByProvider(request):
     if request.user:
-        service_req_obj = ServiceRequest.objects.filter(
-            UserID=request.user, serviceresponse__isnull=True
-        )
-
-        return Response(ServiceRequestSerializer(service_req_obj, many=True).data, status.HTTP_200_OK)
+        provider = ProviderModel.objects.filter(UserID=request.user).first()
+        if provider:
+            service_req_obj = ServiceRequest.objects.filter(
+                ProviderServiceID__ProviderID__UserID=request.user, serviceresponse__isnull=True
+            )
+            print("Data")
+            return Response(ServiceRequestSerializer(service_req_obj, many=True).data, status.HTTP_200_OK)
+        else:
+            return Response({"Error": "you are not a service provider"}, status.HTTP_400_BAD_REQUEST)
     else:
         return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
@@ -243,9 +247,13 @@ class ServiceResponseView(APIView):
     def get(self, request):
         if request.user:
             provider = ProviderModel.objects.filter(UserID=request.user).first()
-            response_objs = ServiceResponse.objects.filter(ServiceRequestID__ProviderServiceID__ProviderID=provider)
+            if provider:
+                response_objs = ServiceResponse.objects.filter(ServiceRequestID__ProviderServiceID__ProviderID=provider)
 
-            return Response(ServiceResponseSerializer(response_objs, many=True).data, status.HTTP_200_OK)
+                return Response(ServiceResponseSerializer(response_objs, many=True).data, status.HTTP_200_OK)
+            else:
+                return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+
         else:
             return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
