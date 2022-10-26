@@ -4,7 +4,6 @@ from django.db import models
 from django.contrib.auth import get_user_model
 from users.models import Gender
 from locations.models import CountyModel
-from provider.models import ProviderModel
 
 UserModel = get_user_model()
 
@@ -50,6 +49,7 @@ class WorkingDays(models.Model):
 
 
 class Advertisement(models.Model):
+    from provider.models import ProviderModel
     ADTitle = models.CharField(max_length=200, null=True, blank=True)
     ProviderID = models.ForeignKey(ProviderModel, on_delete=models.CASCADE)
     ServiceID = models.ManyToManyField(Service)

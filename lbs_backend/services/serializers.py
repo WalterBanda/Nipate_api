@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import (
     WorkingDays, ServiceCategory, Service, Advertisement
 )
-from provider.serializers import ProviderSerializer
 
 from users.serializers import UserModelSerializer
 from locations.serializers import CountyModelSerializers
@@ -42,6 +41,7 @@ class InverseCategorySerializer(ModelSerializer):
 
 
 class AdvertisementSerializer(ModelSerializer):
+    from provider.serializers import ProviderSerializer
     Provider = ProviderSerializer(source="UserID", read_only=True, many=False)
     Location = CountyModelSerializers(source="LocationID", read_only=True, many=False)
     Service = InverseServiceSerializer(source="ServiceID", read_only=True, many=False)
