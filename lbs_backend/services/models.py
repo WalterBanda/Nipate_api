@@ -51,7 +51,7 @@ class WorkingDays(models.Model):
 class Advertisement(models.Model):
     from provider.models import ProviderModel
     ADTitle = models.CharField(max_length=200, null=True, blank=True)
-    ProviderID = models.ForeignKey(ProviderModel, on_delete=models.CASCADE)
+    ProviderID = models.ForeignKey(ProviderModel, null=True, on_delete=models.CASCADE)
     ServiceID = models.ManyToManyField(Service)
     LocationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
     GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
@@ -59,6 +59,8 @@ class Advertisement(models.Model):
     StartDate = models.DateField(default=datetime.date.today)
     ExpiryDate = models.DateField()
     NoOfMessages = models.IntegerField(null=True, blank=True)
+
+    REQUIRED_FIELDS = ['ProviderID']
 
     class Meta:
         verbose_name = "Advertisements"
