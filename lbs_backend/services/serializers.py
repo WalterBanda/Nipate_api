@@ -56,7 +56,7 @@ class AdvertisementSerializer(ModelSerializer):
 
 class CreateAdvertSerializer(Serializer):
     ADTitle = serializers.CharField()
-    UserID = serializers.IntegerField()
+    ProviderID = serializers.IntegerField()
     ServiceID = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
     LocationID = serializers.IntegerField()
     AdDescription = serializers.CharField(allow_blank=True)
