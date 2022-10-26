@@ -50,7 +50,7 @@ class WorkingDays(models.Model):
 
 class Advertisement(models.Model):
     ADTitle = models.CharField(max_length=200, null=True, blank=True)
-    UserID = models.ForeignKey(UserModel, on_delete=models.CASCADE)
+    ProviderID = models.ForeignKey(UserModel, on_delete=models.CASCADE)
     ServiceID = models.ManyToManyField(Service)
     LocationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
     GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
