@@ -64,7 +64,7 @@ class ServiceRequest(models.Model):
         ordering = ['-TimeStamp']
 
     def __str__(self):
-        return self.UserID.FirstName + " | " + self.ProviderServiceID.ServiceTitle
+        return self.UserID.firstName + " | " + self.ProviderServiceID.ServiceTitle
 
 
 class ServiceResponse(models.Model):

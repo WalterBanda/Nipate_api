@@ -45,12 +45,12 @@ class ProviderView(APIView):
 
             details = {
                 "id": provider.id,
-                "User": {
+                "user": {
                     "id": provider.UserID.id,
-                    "MobileNumber": provider.UserID.MobileNumber,
-                    "IDNumber": provider.UserID.IDNumber,
-                    "FirstName": provider.UserID.FirstName,
-                    "SurName": provider.UserID.SurName
+                    "mobileNumber": provider.UserID.mobileNumber,
+                    "idNumber": provider.UserID.idNumber,
+                    "firstName": provider.UserID.firstName,
+                    "surName": provider.UserID.surName
                 },
                 "Location": {
                     "id": provider.CountyID.id,
@@ -151,12 +151,12 @@ def checkProviderStatus(request):
         if provider:
             details = {
                 "id": provider.id,
-                "User": {
+                "user": {
                     "id": provider.UserID.id,
-                    "MobileNumber": provider.UserID.MobileNumber,
-                    "IDNumber": provider.UserID.IDNumber,
-                    "FirstName": provider.UserID.FirstName,
-                    "SurName": provider.UserID.SurName
+                    "mobileNumber": provider.UserID.mobileNumber,
+                    "idNumber": provider.UserID.idNumber,
+                    "firstName": provider.UserID.firstName,
+                    "surName": provider.UserID.surName
                 },
                 "Location": {
                     "id": provider.CountyID.id,
@@ -171,10 +171,10 @@ def checkProviderStatus(request):
                 "id": user.id,
                 "User": {
                     "id": user.id,
-                    "MobileNumber": user.MobileNumber,
-                    "IDNumber": user.IDNumber,
-                    "FirstName": user.FirstName,
-                    "SurName": user.SurName
+                    "MobileNumber": user.mobileNumber,
+                    "IDNumber": user.idNumber,
+                    "FirstName": user.firstName,
+                    "SurName": user.surName
                 },
                 "Location": {
                     "id": user.LocationID.id,
