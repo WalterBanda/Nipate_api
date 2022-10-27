@@ -53,15 +53,15 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
     list_display = (
-        "id", 'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-        'FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance'
+        "id", 'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth',
+        'firstName', 'middleName', 'surName', 'locationID', 'adBalance'
     )
     list_filter = ('is_admin',)
     fieldsets = (
-        ('Authentication', {'fields': ('MobileNumber', 'password')}),
+        ('Authentication', {'fields': ('mobileNumber', 'password')}),
         ('Personal Info', {
-            'fields': ('FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance',
-                       'YearOfBirth', 'GenderID'
+            'fields': ('firstName', 'middleName', 'surName', 'locationID', 'adBalance',
+                       'yearOfBirth', 'genderID'
                        )
         }),
         ('Permissions', {'fields': ('is_admin',)}),
@@ -70,15 +70,15 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': (
-                'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-                'FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance',
+                'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth',
+                'firstName', 'middleName', 'surName', 'locationID', 'adBalance',
                 'password1', 'password2'
             ),
         }),
     )
 
-    search_fields = ('MobileNumber',)
-    ordering = ('MobileNumber',)
+    search_fields = ('mobileNumber',)
+    ordering = ('mobileNumber',)
     filter_horizontal = ()
 
 
