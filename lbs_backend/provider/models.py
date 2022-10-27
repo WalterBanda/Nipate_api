@@ -7,9 +7,9 @@ User = get_user_model()
 
 
 class ProviderModel(models.Model):
-    UserID = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="UserProviderID")
-    CountyID = models.ForeignKey(CountyModel, on_delete=models.CASCADE, related_name="provider_county", null=True)
-    TimeStamp = models.DateTimeField(auto_now_add=True)
+    userID = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name="UserProviderID")
+    countyID = models.ForeignKey(CountyModel, on_delete=models.CASCADE, related_name="provider_county", null=True)
+    timeStamp = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name = "Service Providers"
@@ -17,7 +17,7 @@ class ProviderModel(models.Model):
         ordering = ['TimeStamp']
 
     def __str__(self):
-        return str(self.UserID)
+        return str(self.userID)
 
 
 class ProviderService(models.Model):

@@ -46,15 +46,15 @@ class ProviderView(APIView):
             details = {
                 "id": provider.id,
                 "user": {
-                    "id": provider.UserID.id,
-                    "mobileNumber": provider.UserID.mobileNumber,
-                    "idNumber": provider.UserID.idNumber,
-                    "firstName": provider.UserID.firstName,
-                    "surName": provider.UserID.surName
+                    "id": provider.userID.id,
+                    "mobileNumber": provider.userID.mobileNumber,
+                    "idNumber": provider.userID.idNumber,
+                    "firstName": provider.userID.firstName,
+                    "surName": provider.userID.surName
                 },
                 "Location": {
-                    "id": provider.CountyID.id,
-                    "Name": provider.CountyID.Name
+                    "id": provider.countyID.id,
+                    "Name": provider.countyID.Name
                 },
                 "Provider": True
             }
@@ -152,15 +152,15 @@ def checkProviderStatus(request):
             details = {
                 "id": provider.id,
                 "user": {
-                    "id": provider.UserID.id,
-                    "mobileNumber": provider.UserID.mobileNumber,
-                    "idNumber": provider.UserID.idNumber,
-                    "firstName": provider.UserID.firstName,
-                    "surName": provider.UserID.surName
+                    "id": provider.userID.id,
+                    "mobileNumber": provider.userID.mobileNumber,
+                    "idNumber": provider.userID.idNumber,
+                    "firstName": provider.userID.firstName,
+                    "surName": provider.userID.surName
                 },
                 "Location": {
-                    "id": provider.CountyID.id,
-                    "Name": provider.CountyID.Name
+                    "id": provider.countyID.id,
+                    "Name": provider.countyID.Name
                 },
                 "Provider": True
             }
