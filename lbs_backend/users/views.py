@@ -70,7 +70,7 @@ class UserRegister(APIView):
                 token, _ = Token.objects.get_or_create(user=user)
 
                 results = LoginResponseSerializer({
-                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
+                    "MobileNumber": user.mobileNumber, "FirstName": user.firstName, "LastName": user.surName,
                     "Auth_token": 'Token ' + token.key
                 }, many=False)
 
