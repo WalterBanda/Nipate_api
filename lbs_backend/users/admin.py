@@ -17,7 +17,7 @@ class UserCreationForm(forms.ModelForm):
         fields = (
             'mobileNumber', 'idNumber', 'genderID',
             'yearOfBirth', 'firstName', 'middleName',
-            'surName', 'locationID', 'adBalance'
+            'surName', 'locationID', 'adBalance', 'avatar'
         )
 
     def clean_password2(self):
@@ -43,7 +43,7 @@ class UserChangeForm(forms.ModelForm):
         model = CustomUser
         fields = (
             'mobileNumber', 'idNumber', 'genderID',
-            'yearOfBirth', 'firstName', 'middleName',
+            'yearOfBirth', 'firstName', 'middleName', 'avatar',
             'surName', 'locationID', 'adBalance', 'password', 'is_active', 'is_admin'
         )
 
@@ -53,7 +53,7 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
     list_display = (
-        "id", 'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth',
+        "id", 'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth', 'avatar',
         'firstName', 'middleName', 'surName', 'locationID', 'adBalance'
     )
     list_filter = ('is_admin',)
@@ -61,7 +61,7 @@ class UserAdmin(BaseUserAdmin):
         ('Authentication', {'fields': ('mobileNumber', 'password')}),
         ('Personal Info', {
             'fields': ('firstName', 'middleName', 'surName', 'locationID', 'adBalance',
-                       'yearOfBirth', 'genderID'
+                       'yearOfBirth', 'genderID', 'avatar'
                        )
         }),
         ('Permissions', {'fields': ('is_admin',)}),

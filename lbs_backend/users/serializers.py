@@ -18,7 +18,7 @@ class UserModelSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
         fields = [
-            "id", "mobileNumber", "idNumber", "firstName", "surName"
+            "id", "mobileNumber", "idNumber", "firstName", "surName", "avatar"
         ]
 
     @staticmethod
@@ -76,5 +76,5 @@ class AllDetailSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = [
             "id", "mobileNumber", "idNumber", "firstName", "surName",
-            "location", "gender"
+            "location", "gender", "avatar"
         ]

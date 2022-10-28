@@ -30,6 +30,7 @@ class CustomUser(AbstractBaseUser):
     locationID = models.ForeignKey(CountyModel, on_delete=models.PROTECT, null=True, blank=True)
     adBalance = models.FloatField(default=0, null=True, blank=True)
     dateCreated = models.DateField(auto_now_add=True)
+    avatar = models.URLField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
