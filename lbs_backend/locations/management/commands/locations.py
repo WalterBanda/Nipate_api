@@ -21,7 +21,7 @@ class Command(BaseCommand):
             reader = csv.reader(csv_file, delimiter=',', quotechar='|')
             header = next(reader)
             for row in reader:
-                county, _ = model.objects.get_or_create(Name=" ".join(row[1].split()))
+                county, _ = model.objects.get_or_create(name=" ".join(row[1].split()))
                 # county.save()
 
         print('** All Counties succesfully setup **')
