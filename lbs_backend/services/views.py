@@ -111,6 +111,20 @@ class AdvertisementView(APIView):
             return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
+@swagger_auto_schema(
+    tags=['Advertisements'], method="GET", operation_description="Get Individual advert",
+    responses={200: AdvertisementSerializer(many=False)}
+)
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def getAdvertById(request, advert_id):
+    advert = Advertisement.objects.filter(id=advert_id).first()
+    if advert:
+        return Response(AdvertisementSerializer(advert, many=False).data, status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Advert not found'}, status.HTTP_400_BAD_REQUEST)
+
+
 region = openapi.Parameter("region", in_=openapi.IN_QUERY, description="search by `region/county`", required=False,
                            type=openapi.TYPE_STRING)
 

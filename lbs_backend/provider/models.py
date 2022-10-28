@@ -50,7 +50,6 @@ class ProviderService(models.Model):
 
 
 class ServiceRequest(models.Model):
-    # TODO Update to provider model
     userID = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='user_requesting')
     providerServiceID = models.ForeignKey(ProviderService, on_delete=models.CASCADE)
     centerLocationID = models.ForeignKey(CenterLocation, on_delete=models.DO_NOTHING, blank=True, null=True)

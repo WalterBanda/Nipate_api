@@ -9,8 +9,9 @@ urlpatterns = [
     re_path('^allservices', views.AllServicesView.as_view(), name="allproducts"),
 
     # Ads
-    re_path('^advert', views.AdvertisementView.as_view(), name="adverts"),
+    re_path(r'^advert/(?P<advert_id>\d+)', views.getAdvertById, name="advert_id"),
     re_path('^advert/search', views.getAdvertByRegion, name="search_ad"),
+    re_path('^advert', views.AdvertisementView.as_view(), name="adverts"),
 
     # Requests
     re_path('^request', views.ServiceRequestView.as_view(), name="request"),
@@ -18,7 +19,8 @@ urlpatterns = [
     re_path('^request/provider', views.getRequestsByProvider, name="get_requests_provider"),
     re_path('^request/client', views.getRequestsByClient, name="get_requests_client"),
     re_path('^not-accepted/request/client', views.getRequestNotRespondedByUser, name="get_requests_client_zero"),
-    re_path('^not-accepted/request/provider', views.getRequestNotRespondedByProvider, name="get_requests_provider_zero"),
+    re_path('^not-accepted/request/provider', views.getRequestNotRespondedByProvider,
+            name="get_requests_provider_zero"),
     re_path('^accepted-requests/client', views.getResponseByUser, name="get_response_client"),
     re_path('^accepted-requests/provider', views.getResponsesByProvider, name="get_response_provider"),
 ]
