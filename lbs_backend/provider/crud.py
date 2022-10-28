@@ -5,13 +5,13 @@ from locations.models import CenterLocation
 
 def createProviderService(data, provider_id):
     provider_service, _ = ProviderService.objects.get_or_create(
-        ProviderID=provider_id, ProductID_id=data["ProductID"],
+        providerID=provider_id, productID_id=data["productID"],
     )
-    provider_service.ServiceTitle = data["ServiceTitle"]
-    provider_service.ServiceDescription = data["ServiceDescription"]
-    provider_service.Longitude = data["Longitude"]
-    provider_service.Lattitude = data["Lattitude"]
-    provider_service.CenterLocationID_id = data["CenterLocationID"]
+    provider_service.serviceTitle = data["serviceTitle"]
+    provider_service.serviceDescription = data["serviceDescription"]
+    provider_service.longitude = data["longitude"]
+    provider_service.lattitude = data["lattitude"]
+    provider_service.CenterLocationID_id = data["centerLocationID"]
     provider_service.save()
 
     return provider_service
