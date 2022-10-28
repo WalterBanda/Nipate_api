@@ -69,7 +69,7 @@ class ServiceRequestSerializer(serializers.ModelSerializer):
 
 
 class ServiceResponseSerializer(serializers.ModelSerializer):
-    Request = ServiceRequestSerializer(source="serviceRequestID", many=False)
+    request = ServiceRequestSerializer(source="serviceRequestID", many=False)
 
     class Meta:
         model = ServiceResponse

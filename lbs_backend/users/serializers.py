@@ -63,14 +63,14 @@ class LoginResponseSerializer(serializers.Serializer):
     mobileNumber = serializers.CharField()
     firstName = serializers.CharField()
     lastName = serializers.CharField()
-    Auth_token = serializers.CharField()
+    auth_token = serializers.CharField()
 
 
 # All User Details serializer
 
 class AllDetailSerializer(serializers.ModelSerializer):
-    Location = CountyModelSerializers(read_only=True, source="LocationID", many=False)
-    Gender = GenderSerializer(read_only=True, source="GenderID", many=False)
+    location = CountyModelSerializers(read_only=True, source="locationID", many=False)
+    gender = GenderSerializer(read_only=True, source="genderID", many=False)
 
     class Meta:
         model = CustomUser

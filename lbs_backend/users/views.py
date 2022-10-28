@@ -156,7 +156,7 @@ class ConfirmUser(APIView):
     @swagger_auto_schema(tags=['User'],
                          operation_description="Confirm If User Credentials is Valid",
                          responses={
-                             200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"User": True}])
+                             200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"user": True}])
                          }
                          )
     def get(self, request):
