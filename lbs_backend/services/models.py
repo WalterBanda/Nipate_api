@@ -9,26 +9,26 @@ UserModel = get_user_model()
 
 
 class ServiceCategory(models.Model):
-    Name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "Service Categories"
         verbose_name_plural = "Service Categories"
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 
 class Service(models.Model):
-    CategoryID = models.ForeignKey(ServiceCategory, on_delete=models.PROTECT, related_name="category")
-    Name = models.CharField(max_length=100)
+    categoryID = models.ForeignKey(ServiceCategory, on_delete=models.PROTECT, related_name="category")
+    name = models.CharField(max_length=100)
 
     class Meta:
         verbose_name = "Services"
         verbose_name_plural = "Services"
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 
 class WorkingDays(models.Model):
@@ -50,15 +50,15 @@ class WorkingDays(models.Model):
 
 class Advertisement(models.Model):
     from provider.models import ProviderModel
-    ADTitle = models.CharField(max_length=200, null=True, blank=True)
-    ProviderID = models.ForeignKey(ProviderModel, null=True, on_delete=models.CASCADE)
-    ServiceID = models.ManyToManyField(Service)
-    LocationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
-    GenderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
-    AdDescription = models.TextField(null=True, blank=True)
-    StartDate = models.DateField(default=datetime.date.today)
-    ExpiryDate = models.DateField()
-    NoOfMessages = models.IntegerField(null=True, blank=True)
+    title = models.CharField(max_length=200, null=True, blank=True)
+    providerID = models.ForeignKey(ProviderModel, null=True, on_delete=models.CASCADE)
+    serviceID = models.ManyToManyField(Service)
+    locationID = models.ForeignKey(CountyModel, on_delete=models.CASCADE)
+    genderID = models.ForeignKey(Gender, on_delete=models.PROTECT, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    startDate = models.DateField(default=datetime.date.today)
+    expiryDate = models.DateField()
+    noOfMessages = models.IntegerField(null=True, blank=True)
 
     REQUIRED_FIELDS = ['ProviderID']
 
@@ -67,4 +67,4 @@ class Advertisement(models.Model):
         verbose_name_plural = "Advertisements"
 
     def __str__(self):
-        return str(self.ADTitle + " | " + str(self.ExpiryDate))
+        return str(self.title + " | " + str(self.expiryDate))
