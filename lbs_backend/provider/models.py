@@ -14,7 +14,7 @@ class ProviderModel(models.Model):
     class Meta:
         verbose_name = "Service Providers"
         verbose_name_plural = "Service Providers"
-        ordering = ['TimeStamp']
+        ordering = ['timeStamp']
 
     def __str__(self):
         return str(self.userID)
@@ -43,7 +43,7 @@ class ProviderService(models.Model):
     class Meta:
         verbose_name = "Provider Services"
         verbose_name_plural = "Provider Services"
-        ordering = ['-TimeStamp']
+        ordering = ['-timeStamp']
 
     def __str__(self):
         return "{} | {}".format(str(self.providerID), self.serviceTitle)
@@ -62,7 +62,7 @@ class ServiceRequest(models.Model):
     class Meta:
         verbose_name = "Services Requests"
         verbose_name_plural = "Services Requests"
-        ordering = ['-TimeStamp']
+        ordering = ['-timeStamp']
 
     def __str__(self):
         return self.userID.firstName + " | " + self.providerServiceID.serviceTitle
@@ -76,7 +76,7 @@ class ServiceResponse(models.Model):
     class Meta:
         verbose_name = "Services Responses"
         verbose_name_plural = "Services Responses"
-        ordering = ['-TimeStamp']
+        ordering = ['-timeStamp']
 
     def __str__(self):
         return str(self.serviceRequestID)

@@ -60,7 +60,7 @@ class Advertisement(models.Model):
     expiryDate = models.DateField()
     noOfMessages = models.IntegerField(null=True, blank=True)
 
-    REQUIRED_FIELDS = ['ProviderID']
+    REQUIRED_FIELDS = ['providerID']
 
     class Meta:
         verbose_name = "Advertisements"
