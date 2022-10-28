@@ -22,16 +22,16 @@ class UserModelSerializer(serializers.ModelSerializer):
         ]
 
     @staticmethod
-    def validate_MobileNumber(MobileNumber):
-        if not MobileNumber:
+    def validate_MobileNumber(mobileNumber):
+        if not mobileNumber:
             raise serializers.ValidationError("Please set MobileNumber")
-        return MobileNumber
+        return mobileNumber
 
     @staticmethod
-    def validate_IDNumber(IDNumber):
-        if IDNumber is None:
+    def validate_IDNumber(idNumber):
+        if idNumber is None:
             raise serializers.ValidationError("Please set IDNumber")
-        return IDNumber
+        return idNumber
 
 
 class userDetailsValidationSerializer(serializers.Serializer):
@@ -44,7 +44,7 @@ class userDetailsValidationSerializer(serializers.Serializer):
 
 
 class userPutDetailSerializer(serializers.Serializer):
-    UserID = serializers.IntegerField()
+    userID = serializers.IntegerField()
     locationID = serializers.IntegerField()
     genderID = serializers.IntegerField()
     password = serializers.CharField(min_length=8)
