@@ -2,28 +2,28 @@ from django.db import models
 
 
 class CountyModel(models.Model):
-    Name = models.CharField(max_length=40)
+    name = models.CharField(max_length=40)
 
     class Meta:
         verbose_name = 'Counties'
         verbose_name_plural = 'Counties'
 
     def __str__(self):
-        return self.Name
+        return self.name
 
 
 class CenterLocation(models.Model):
-    DisplayName = models.CharField(max_length=250)
-    State = models.CharField(max_length=150, null=True, blank=True)
-    Town = models.CharField(max_length=150, null=True, blank=True)
-    Suburb = models.CharField(max_length=150, null=True, blank=True)
-    Road = models.CharField(max_length=150, null=True, blank=True)
-    Landmark = models.CharField(max_length=150, null=True, blank=True)
-    CenterBlock = models.CharField(max_length=150, null=True, blank=True)
+    displayName = models.CharField(max_length=250)
+    state = models.CharField(max_length=150, null=True, blank=True)
+    town = models.CharField(max_length=150, null=True, blank=True)
+    suburb = models.CharField(max_length=150, null=True, blank=True)
+    road = models.CharField(max_length=150, null=True, blank=True)
+    landmark = models.CharField(max_length=150, null=True, blank=True)
+    centerBlock = models.CharField(max_length=150, null=True, blank=True)
 
     class Meta:
         verbose_name = "Center Locations"
         verbose_name_plural = "Center Locations"
 
     def __str__(self):
-        return self.DisplayName
+        return self.displayName

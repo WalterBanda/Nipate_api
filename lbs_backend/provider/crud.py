@@ -23,7 +23,7 @@ def pinProviderServiceCenter(lattitude, longitude):
         .format(lattitude, longitude)
     response = requests.request("GET", url, headers=headers, data=payload)
 
-    center = CenterLocation.objects.filter(DisplayName=response.json()["display_name"]).first()
+    center = CenterLocation.objects.filter(displayName=response.json()["display_name"]).first()
     if center:
         return center
     else:
@@ -42,25 +42,25 @@ landmark = [
 
 
 def createNewCenterLocation(center):
-    center_obj = CenterLocation(DisplayName=center["display_name"])
+    center_obj = CenterLocation(displayName=center["display_name"])
     for x in state:
         if x in center["address"]:
-            center_obj.State = center["address"][x]
+            center_obj.state = center["address"][x]
     for x in town:
         if x in center["address"]:
-            center_obj.Town = center["address"][x]
+            center_obj.town = center["address"][x]
     for x in suburb:
         if x in center["address"]:
-            center_obj.Suburb = center["address"][x]
+            center_obj.suburb = center["address"][x]
 
     for x in landmark:
         if x in center["address"]:
-            center_obj.Landmark = center["address"][x]
+            center_obj.landmark = center["address"][x]
     for x in block:
         if x in center["address"]:
-            center_obj.CenterBlock = center["address"][x]
+            center_obj.centerBlock = center["address"][x]
     if "road" in center["address"]:
-        center_obj.Road = center["address"]["road"]
+        center_obj.road = center["address"]["road"]
     center_obj.save()
 
     return center_obj
