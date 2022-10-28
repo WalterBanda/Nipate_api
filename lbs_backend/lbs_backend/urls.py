@@ -53,8 +53,8 @@ admin.site.index_title = "Applications"
 
 schema_view = get_schema_view(
     openapi.Info(
-        title="Nipate data source and API", default_version='v1.0', description="LBS APIs Doc",
-        terms_of_service="https://www.google.com/policies/terms/", contact=openapi.Contact(email="amosditto@gmail.com"),
+        title="Nipate data source and API", default_version='v2.0', description="Nipate API Documentation",
+        terms_of_service="https://www.google.com/policies/terms/", contact=openapi.Contact(email="walterkaimurima@gmail.com"),
         license=openapi.License(name="BSD License"),
     ), public=True, permission_classes=[permissions.AllowAny], generator_class=CustomOpenAPISchemaGenerator,
 )
