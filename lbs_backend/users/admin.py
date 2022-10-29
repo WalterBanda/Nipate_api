@@ -15,9 +15,9 @@ class UserCreationForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = (
-            'MobileNumber', 'IDNumber', 'GenderID',
-            'YearOfBirth', 'FirstName', 'MiddleName',
-            'SurName', 'LocationID', 'ADBalance'
+            'mobileNumber', 'idNumber', 'genderID',
+            'yearOfBirth', 'firstName', 'middleName',
+            'surName', 'locationID', 'adBalance', 'avatar'
         )
 
     def clean_password2(self):
@@ -42,9 +42,9 @@ class UserChangeForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = (
-            'MobileNumber', 'IDNumber', 'GenderID',
-            'YearOfBirth', 'FirstName', 'MiddleName',
-            'SurName', 'LocationID', 'ADBalance', 'password', 'is_active', 'is_admin'
+            'mobileNumber', 'idNumber', 'genderID',
+            'yearOfBirth', 'firstName', 'middleName', 'avatar',
+            'surName', 'locationID', 'adBalance', 'password', 'is_active', 'is_admin'
         )
 
 
@@ -53,15 +53,15 @@ class UserAdmin(BaseUserAdmin):
     add_form = UserCreationForm
 
     list_display = (
-        "id", 'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-        'FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance'
+        "id", 'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth', 'avatar',
+        'firstName', 'middleName', 'surName', 'locationID', 'adBalance'
     )
     list_filter = ('is_admin',)
     fieldsets = (
-        ('Authentication', {'fields': ('MobileNumber', 'password')}),
+        ('Authentication', {'fields': ('mobileNumber', 'password')}),
         ('Personal Info', {
-            'fields': ('FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance',
-                       'YearOfBirth', 'GenderID'
+            'fields': ('firstName', 'middleName', 'surName', 'locationID', 'adBalance',
+                       'yearOfBirth', 'genderID', 'avatar'
                        )
         }),
         ('Permissions', {'fields': ('is_admin',)}),
@@ -70,15 +70,15 @@ class UserAdmin(BaseUserAdmin):
         (None, {
             'classes': ('wide',),
             'fields': (
-                'MobileNumber', 'IDNumber', 'GenderID', 'YearOfBirth',
-                'FirstName', 'MiddleName', 'SurName', 'LocationID', 'ADBalance',
+                'mobileNumber', 'idNumber', 'genderID', 'yearOfBirth',
+                'firstName', 'middleName', 'surName', 'locationID', 'adBalance',
                 'password1', 'password2'
             ),
         }),
     )
 
-    search_fields = ('MobileNumber',)
-    ordering = ('MobileNumber',)
+    search_fields = ('mobileNumber',)
+    ordering = ('mobileNumber',)
     filter_horizontal = ()
 
 

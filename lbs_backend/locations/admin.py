@@ -5,12 +5,12 @@ from .models import CountyModel, CenterLocation
 @admin.register(CountyModel)
 class CountyModelAdmin(admin.ModelAdmin):
     list_display = [
-        "id", "Name"
+        "id", "name"
     ]
 
 
 @admin.register(CenterLocation)
 class CenterLocationAdmin(admin.ModelAdmin):
     list_display = [
-        "DisplayName", "State", "Town", "Suburb", "Road"
+        "displayName", "state", "town", "suburb", "road"
     ]

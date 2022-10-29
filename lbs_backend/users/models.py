@@ -20,30 +20,31 @@ class Gender(models.Model):
 # ----> User Table
 
 class CustomUser(AbstractBaseUser):
-    MobileNumber = models.CharField(max_length=12, unique=True)
-    IDNumber = models.CharField(max_length=15, null=True, blank=True)
-    GenderID = models.ForeignKey(Gender, on_delete=models.CASCADE, null=True, blank=True)
-    YearOfBirth = models.DateField(null=True, blank=True)
-    FirstName = models.CharField(max_length=50, null=True, blank=True)
-    MiddleName = models.CharField(max_length=50, null=True, blank=True)
-    SurName = models.CharField(max_length=50, null=True, blank=True)
-    LocationID = models.ForeignKey(CountyModel, on_delete=models.PROTECT, null=True, blank=True)
-    ADBalance = models.FloatField(default=0, null=True, blank=True)
-    DateCreated = models.DateField(auto_now_add=True)
+    mobileNumber = models.CharField(max_length=12, unique=True)
+    idNumber = models.CharField(max_length=15, null=True, blank=True)
+    genderID = models.ForeignKey(Gender, on_delete=models.CASCADE, null=True, blank=True)
+    yearOfBirth = models.DateField(null=True, blank=True)
+    firstName = models.CharField(max_length=50, null=True, blank=True)
+    middleName = models.CharField(max_length=50, null=True, blank=True)
+    surName = models.CharField(max_length=50, null=True, blank=True)
+    locationID = models.ForeignKey(CountyModel, on_delete=models.PROTECT, null=True, blank=True)
+    adBalance = models.FloatField(default=0, null=True, blank=True)
+    dateCreated = models.DateField(auto_now_add=True)
+    avatar = models.URLField(null=True, blank=True)
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
 
     objects = UserManager()
 
-    USERNAME_FIELD = 'MobileNumber'
-    REQUIRED_FIELDS = ['IDNumber', 'FirstName']
+    USERNAME_FIELD = 'mobileNumber'
+    REQUIRED_FIELDS = ['idNumber', 'firstName']
 
     class Meta:
         verbose_name = 'User'
         verbose_name_plural = 'Users'
 
     def __str__(self):
-        return "{} | {}".format(self.MobileNumber, self.FirstName)
+        return "{} | {}".format(self.mobileNumber, self.firstName)
 
     @staticmethod
     def has_perm(perm, obj=None):

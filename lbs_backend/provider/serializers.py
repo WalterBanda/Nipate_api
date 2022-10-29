@@ -3,95 +3,95 @@ from abc import ABC
 from rest_framework import serializers
 from .models import ProviderModel, ProviderService, ServiceResponse, ServiceRequest
 from users.serializers import UserModelSerializer
-from services.serializers import ServiceSerializer
 from locations.serializers import CenterLocationSerializer, CountyModelSerializers
 
 
 class ProviderSerializer(serializers.ModelSerializer):
-    User = UserModelSerializer(read_only=True, source="UserID", many=False)
-    County = CountyModelSerializers(source="CountyID", read_only=True, many=False)
+    user = UserModelSerializer(read_only=True, source="userID", many=False)
+    county = CountyModelSerializers(source="countyID", read_only=True, many=False)
 
     class Meta:
         model = ProviderModel
         fields = [
-            "id", "User", "County"
+            "id", "user", "county"
         ]
 
 
 class CreateProviderSerializer(serializers.Serializer):
-    CountyID = serializers.IntegerField()
+    countyID = serializers.IntegerField()
 
 
 class ProviderServiceSerializer(serializers.ModelSerializer):
-    Provider = ProviderSerializer(read_only=True, source="ProviderID")
-    Service = ServiceSerializer(read_only=True, source="ProductID")
-    Location = CenterLocationSerializer(source="CenterLocationID", read_only=True)
+    from services.serializers import ServiceSerializer
+    provider = ProviderSerializer(read_only=True, source="providerID")
+    service = ServiceSerializer(read_only=True, source="productID")
+    location = CenterLocationSerializer(source="centerLocationID", read_only=True)
 
     class Meta:
         model = ProviderService
         fields = [
-            "id", "Provider", "ServiceTitle", "Service", "ServiceDescription", "Longitude", "Lattitude",
-            "Location", "workingDays", "AgeBracket",
+            "id", "provider", "serviceTitle", "service", "serviceDescription", "longitude", "lattitude",
+            "location", "workingDays", "ageBracket",
         ]
 
 
 class CreatePostProviderServiceSerializer(serializers.Serializer):
-    ServiceTitle = serializers.CharField()
-    ProductID = serializers.IntegerField()
-    ServiceDescription = serializers.CharField(allow_null=True, allow_blank=True)
-    Longitude = serializers.CharField(max_length=50)
-    Lattitude = serializers.CharField(max_length=50)
-    CenterLocationID = serializers.IntegerField()
+    serviceTitle = serializers.CharField()
+    productID = serializers.IntegerField()
+    serviceDescription = serializers.CharField(allow_null=True, allow_blank=True)
+    longitude = serializers.CharField(max_length=50)
+    lattitude = serializers.CharField(max_length=50)
+    centerLocationID = serializers.IntegerField()
 
 
 class SearchCenterLocationSerializer(serializers.Serializer):
-    Longitude = serializers.CharField(max_length=50)
-    Lattitude = serializers.CharField(max_length=50)
+    longitude = serializers.CharField(max_length=50)
+    lattitude = serializers.CharField(max_length=50)
 
 
 class UserStatusSerializer(serializers.Serializer):
     id = serializers.IntegerField()
-    User = UserModelSerializer(many=False)
-    Location = CountyModelSerializers(many=False)
-    Provider = serializers.BooleanField()
+    user = UserModelSerializer(many=False)
+    location = CountyModelSerializers(many=False)
+    provider = serializers.BooleanField()
 
 
 class ServiceRequestSerializer(serializers.ModelSerializer):
-    User = UserModelSerializer(read_only=True, source="UserID", many=False)
-    Service = ProviderServiceSerializer(source="ProviderServiceID", many=False)
-    CenterLocation = CenterLocationSerializer(source="CenterLocationID", many=False)
+    user = UserModelSerializer(read_only=True, source="userID", many=False)
+    service = ProviderServiceSerializer(source="providerServiceID", many=False)
+    centerLocation = CenterLocationSerializer(source="centerLocationID", many=False)
 
     class Meta:
         model = ServiceRequest
         fields = [
-            "id", "User", "Service", "CenterLocation", "TimeStamp", "RequestText", "Latitude", "Longitude"
+            "id", "user", "service", "centerLocation", "timeStamp", "requestText", "latitude", "longitude"
         ]
 
 
 class ServiceResponseSerializer(serializers.ModelSerializer):
-    Request = ServiceRequestSerializer(source="ServiceRequestID", many=False)
+    request = ServiceRequestSerializer(source="serviceRequestID", many=False)
 
     class Meta:
         model = ServiceResponse
         fields = [
-            "id", "Request", "ResponseText", "TimeStamp"
+            "id", "request", "responseText", "timeStamp"
         ]
 
 
 class CreateServiceRequestSerializer(serializers.Serializer):
-    ProviderServiceID = serializers.IntegerField()
-    RequestText = serializers.CharField(allow_blank=True, allow_null=True)
-    CenterLocationID = serializers.IntegerField(allow_null=True)
-    Latitude = serializers.CharField(allow_blank=True, allow_null=True)
-    Longitude = serializers.CharField(allow_blank=True, allow_null=True)
+    providerServiceID = serializers.IntegerField()
+    requestText = serializers.CharField(allow_blank=True, allow_null=True)
+    centerLocationID = serializers.IntegerField(allow_null=True)
+    latitude = serializers.CharField(allow_blank=True, allow_null=True)
+    longitude = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class CreateServiceResponseSerializer(serializers.Serializer):
-    ServiceRequestID = serializers.IntegerField()
-    ResponseText = serializers.CharField(allow_blank=True, allow_null=True)
+    serviceRequestID = serializers.IntegerField()
+    responseText = serializers.CharField(allow_blank=True, allow_null=True)
 
 
 class SearchServiceSerializer(serializers.Serializer):
     searchdata = serializers.CharField()
-    ServiceCategory = serializers.CharField(allow_blank=True)
-    Region = serializers.CharField(allow_blank=True)
+    serviceCategory = serializers.CharField(allow_blank=True)
+    region = serializers.CharField(allow_blank=True)

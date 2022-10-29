@@ -8,7 +8,7 @@ admin.site.register(ServiceCategory)
 
 @admin.register(Service)
 class ServiceAdmin(admin.ModelAdmin):
-    list_display = ['id', 'Name']
+    list_display = ['id', 'name']
 
 
 @admin.register(WorkingDays)
@@ -19,6 +19,6 @@ class WorkingDaysAdmin(admin.ModelAdmin):
 @admin.register(Advertisement)
 class AdvertisementAdmin(admin.ModelAdmin):
     list_display = [
-        "id", "ADTitle", "UserID", "LocationID", "AdDescription", "StartDate", "ExpiryDate",
-        "NoOfMessages"
+        "id", "title", "providerID", "locationID", "description", "startDate", "expiryDate",
+        "noOfMessages"
     ]

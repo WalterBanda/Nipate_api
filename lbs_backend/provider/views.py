@@ -28,10 +28,10 @@ class ProviderView(APIView):
                          tags=["Provider"], responses={200: ProviderSerializer(many=False)})
     def get(self, request):
         if request.user:
-            provider_obj = ProviderModel.objects.filter(UserID_id=request.user.id).first()
+            provider_obj = ProviderModel.objects.filter(userID_id=request.user.id).first()
             return Response(ProviderSerializer(provider_obj, many=False).data, status.HTTP_200_OK)
 
-        return Response({"Error": "User is not Authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is not Authenticated"}, status=status.HTTP_401_UNAUTHORIZED)
 
     @swagger_auto_schema(tags=["Provider"], operation_description="Create New Provider Account",
                          request_body=CreateProviderSerializer(),
@@ -39,24 +39,24 @@ class ProviderView(APIView):
     def post(self, request):
         serializer = CreateProviderSerializer(data=request.data)
         if serializer.is_valid():
-            provider, _ = ProviderModel.objects.get_or_create(UserID=request.user)
-            provider.CountyID_id = request.data["CountyID"]
+            provider, _ = ProviderModel.objects.get_or_create(userID=request.user)
+            provider.CountyID_id = request.data["countyID"]
             provider.save()
 
             details = {
                 "id": provider.id,
-                "User": {
-                    "id": provider.UserID.id,
-                    "MobileNumber": provider.UserID.MobileNumber,
-                    "IDNumber": provider.UserID.IDNumber,
-                    "FirstName": provider.UserID.FirstName,
-                    "SurName": provider.UserID.SurName
+                "user": {
+                    "id": provider.userID.id,
+                    "mobileNumber": provider.userID.mobileNumber,
+                    "idNumber": provider.userID.idNumber,
+                    "firstName": provider.userID.firstName,
+                    "surName": provider.userID.surName
                 },
-                "Location": {
-                    "id": provider.CountyID.id,
-                    "Name": provider.CountyID.Name
+                "location": {
+                    "id": provider.countyID.id,
+                    "name": provider.countyID.name
                 },
-                "Provider": True
+                "provider": True
             }
             return Response(details, status.HTTP_201_CREATED)
         else:
@@ -71,12 +71,12 @@ class ProviderServiceView(APIView):
                          tags=["Provider"], responses={200: ProviderServiceSerializer(many=True)})
     def get(self, request):
         if request.user:
-            provider = ProviderModel.objects.filter(UserID=request.user).first()
+            provider = ProviderModel.objects.filter(userID=request.user).first()
             if provider:
-                services = ProviderService.objects.filter(ProviderID=provider)
+                services = ProviderService.objects.filter(providerID=provider)
                 return Response(ProviderServiceSerializer(services, many=True).data, status.HTTP_200_OK)
             else:
-                return Response({"Error": "Provider Doesn't Exists"}, status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Provider Doesn't Exists"}, status.HTTP_404_NOT_FOUND)
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
@@ -87,12 +87,12 @@ class ProviderServiceView(APIView):
     def post(self, request):
         serializer = CreatePostProviderServiceSerializer(data=request.data)
         if serializer.is_valid():
-            provider_id = ProviderModel.objects.filter(UserID=request.user).first()
+            provider_id = ProviderModel.objects.filter(userID=request.user).first()
             if provider_id:
                 provider_service = createProviderService(request.data, provider_id)
                 return Response(ProviderServiceSerializer(provider_service, many=False).data, status.HTTP_201_CREATED)
             else:
-                return Response({"Error": "Provider Doesn't Exist"}, status.HTTP_404_NOT_FOUND)
+                return Response({"error": "Provider Doesn't Exist"}, status.HTTP_404_NOT_FOUND)
             pass
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -110,13 +110,13 @@ def searchProviderServices(request):
     data = request.data
 
     service_obj = ProviderService.objects.filter(
-        Q(ServiceTitle__icontains=data["searchdata"]) | Q(CenterLocationID__DisplayName__icontains=data["searchdata"])
+        Q(serviceTitle__icontains=data["searchdata"]) | Q(centerLocationID__DisplayName__icontains=data["searchdata"])
     )
 
-    if data["ServiceCategory"] != "" or data["ServiceCategory"] is not None:
-        service_obj = service_obj.filter(ProductID__CategoryID__Name__icontains=data["ServiceCategory"])
-    if data["Region"] != "" or data["Region"] is not None:
-        service_obj = service_obj.filter(ProviderID__CountyID__Name__icontains=data["Region"])
+    if data["serviceCategory"] != "" or data["serviceCategory"] is not None:
+        service_obj = service_obj.filter(productID__CategoryID__Name__icontains=data["serviceCategory"])
+    if data["region"] != "" or data["region"] is not None:
+        service_obj = service_obj.filter(providerID__CountyID__Name__icontains=data["region"])
 
     return Response(ProviderServiceSerializer(service_obj, many=True).data, status.HTTP_200_OK)
 
@@ -132,7 +132,7 @@ def searchProviderServices(request):
 def searchCenterLocation(request):
     serializer = SearchCenterLocationSerializer(data=request.data)
     if serializer.is_valid():
-        center = pinProviderServiceCenter(lattitude=request.data["Lattitude"], longitude=request.data["Longitude"])
+        center = pinProviderServiceCenter(lattitude=request.data["lattitude"], longitude=request.data["longitude"])
         return Response(CenterLocationSerializer(center, many=False).data, status.HTTP_200_OK)
 
     return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
@@ -147,40 +147,40 @@ def searchCenterLocation(request):
 def checkProviderStatus(request):
     if request.user:
 
-        provider = ProviderModel.objects.filter(UserID=request.user).first()
+        provider = ProviderModel.objects.filter(userID=request.user).first()
         if provider:
             details = {
                 "id": provider.id,
-                "User": {
-                    "id": provider.UserID.id,
-                    "MobileNumber": provider.UserID.MobileNumber,
-                    "IDNumber": provider.UserID.IDNumber,
-                    "FirstName": provider.UserID.FirstName,
-                    "SurName": provider.UserID.SurName
+                "user": {
+                    "id": provider.userID.id,
+                    "mobileNumber": provider.userID.mobileNumber,
+                    "idNumber": provider.userID.idNumber,
+                    "firstName": provider.userID.firstName,
+                    "surName": provider.userID.surName
                 },
-                "Location": {
-                    "id": provider.CountyID.id,
-                    "Name": provider.CountyID.Name
+                "location": {
+                    "id": provider.countyID.id,
+                    "name": provider.countyID.name
                 },
-                "Provider": True
+                "provider": True
             }
             return Response(details, status.HTTP_200_OK)
         else:
             user = request.user
             details = {
                 "id": user.id,
-                "User": {
+                "user": {
                     "id": user.id,
-                    "MobileNumber": user.MobileNumber,
-                    "IDNumber": user.IDNumber,
-                    "FirstName": user.FirstName,
-                    "SurName": user.SurName
+                    "mobileNumber": user.mobileNumber,
+                    "idNumber": user.idNumber,
+                    "firstName": user.firstName,
+                    "surName": user.surName
                 },
-                "Location": {
-                    "id": user.LocationID.id,
-                    "Name": user.LocationID.Name
+                "location": {
+                    "id": user.locationID.id,
+                    "Name": user.locationID.name
                 },
-                "Provider": False
+                "provider": False
             }
             return Response(details, status.HTTP_200_OK)
     else:

@@ -44,12 +44,12 @@ class ServicesView(APIView):
         data = request.query_params
 
         if 'CategoryID' in data:
-            obj = Service.objects.filter(CategoryID_id=data['CategoryID'])
+            obj = Service.objects.filter(categoryID_id=data['categoryID'])
             serializer = ServiceSerializer(obj, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
         if 'Name' in data:
-            obj = Service.objects.filter(Name__contains=data['Name'])
+            obj = Service.objects.filter(name__contains=data['name'])
             serializer = ServiceSerializer(obj, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
 
@@ -99,8 +99,8 @@ class AdvertisementView(APIView):
             serializer = CreateAdvertSerializer(data=data)
             if serializer.is_valid():
                 ad_obj = Advertisement(
-                    ADTitle=data["ADTitle"], UserID=request.user, LocationID_id=data["LocationID"],
-                    AdDescription=data["AdDescription"], StartDate=data["StartDate"], ExpiryDate=data["ExpiryDate"]
+                    title=data["title"], providerID=data['providerID'], locationID_id=data["locationID"],
+                    description=data["description"], startDate=data["startDate"], expiryDate=data["expiryDate"]
                 )
                 ad_obj.save()
 
@@ -109,6 +109,20 @@ class AdvertisementView(APIView):
                 return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
         else:
             return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+
+
+@swagger_auto_schema(
+    tags=['Advertisements'], method="GET", operation_description="Get Individual advert",
+    responses={200: AdvertisementSerializer(many=False)}
+)
+@api_view(["GET"])
+@permission_classes([permissions.AllowAny])
+def getAdvertById(request, advert_id):
+    advert = Advertisement.objects.filter(id=advert_id).first()
+    if advert:
+        return Response(AdvertisementSerializer(advert, many=False).data, status.HTTP_200_OK)
+    else:
+        return Response({'error': 'Advert not found'}, status.HTTP_400_BAD_REQUEST)
 
 
 region = openapi.Parameter("region", in_=openapi.IN_QUERY, description="search by `region/county`", required=False,
@@ -124,7 +138,7 @@ region = openapi.Parameter("region", in_=openapi.IN_QUERY, description="search b
 def getAdvertByRegion(request):
     params = request.query_params
     if "region" in params:
-        adverts = Advertisement.objects.filter(LocationID__Name__icontains=params["region"])
+        adverts = Advertisement.objects.filter(locationID__Name__icontains=params["region"])
         return Response(AdvertisementSerializer(adverts, many=True).data, status.HTTP_200_OK)
     else:
         adverts = Advertisement.objects.all()
@@ -139,10 +153,10 @@ class ServiceRequestView(APIView):
                          responses={200: ServiceRequestSerializer(many=True)})
     def get(self, request):
         if request.user:
-            requests = ServiceRequest.objects.filter(UserID=request.user)
+            requests = ServiceRequest.objects.filter(userID=request.user)
             return Response(ServiceRequestSerializer(requests, many=True).data, status.HTTP_200_OK)
         else:
-            return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
     @swagger_auto_schema(tags=["Services Requests"],
                          operation_description="Request Service Endpoint <br> Authorized Users only",
@@ -154,16 +168,16 @@ class ServiceRequestView(APIView):
         if serializer.is_valid():
             if request.user:
                 request_obj = ServiceRequest(
-                    UserID=request.user, ProviderServiceID_id=data["ProviderServiceID"],
-                    CenterLocationID_id=data["CenterLocationID"], Latitude=data["Latitude"],
-                    Longitude=data["Longitude"], RequestText=data["RequestText"]
+                    userID=request.user, providerServiceID_id=data["providerServiceID"],
+                    centerLocationID_id=data["centerLocationID"], latitude=data["latitude"],
+                    longitude=data["Longitude"], requestText=data["requestText"]
                 )
                 request_obj.save()
 
                 return Response(ServiceRequestSerializer(request_obj, many=False).data, status.HTTP_201_CREATED)
 
             else:
-                return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
         else:
             return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
@@ -176,11 +190,11 @@ class ServiceRequestView(APIView):
 @permission_classes([permissions.IsAuthenticated])
 def getRequestsByProvider(request):
     if request.user:
-        services_request = ServiceRequest.objects.filter(ProviderServiceID__ProviderID__UserID=request.user)
+        services_request = ServiceRequest.objects.filter(providerServiceID__providerID__userID=request.user)
 
         return Response(ServiceRequestSerializer(services_request, many=True).data, status.HTTP_200_OK)
     else:
-        return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
 @swagger_auto_schema(
@@ -191,11 +205,11 @@ def getRequestsByProvider(request):
 @permission_classes([permissions.IsAuthenticated])
 def getRequestsByClient(request):
     if request.user:
-        services_request = ServiceRequest.objects.filter(UserID=request.user)
+        services_request = ServiceRequest.objects.filter(userID=request.user)
 
         return Response(ServiceRequestSerializer(services_request, many=True).data, status.HTTP_200_OK)
     else:
-        return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
 @swagger_auto_schema(
@@ -208,7 +222,7 @@ def getRequestsByClient(request):
 def getRequestNotRespondedByUser(request):
     if request.user:
         services_request = ServiceRequest.objects.filter(
-            UserID=request.user, serviceresponse__isnull=True
+            userID=request.user, serviceresponse__isnull=True
         )
 
         return Response(ServiceRequestSerializer(services_request, many=True).data, status.HTTP_200_OK)
@@ -228,14 +242,14 @@ def getRequestNotRespondedByProvider(request):
         provider = ProviderModel.objects.filter(UserID=request.user).first()
         if provider:
             service_req_obj = ServiceRequest.objects.filter(
-                ProviderServiceID__ProviderID__UserID=request.user, serviceresponse__isnull=True
+                providerServiceID__ProviderID__UserID=request.user, serviceresponse__isnull=True
             )
             print("Data")
             return Response(ServiceRequestSerializer(service_req_obj, many=True).data, status.HTTP_200_OK)
         else:
-            return Response({"Error": "you are not a service provider"}, status.HTTP_400_BAD_REQUEST)
+            return Response({"error": "you are not a service provider"}, status.HTTP_400_BAD_REQUEST)
     else:
-        return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
 class ServiceResponseView(APIView):
@@ -246,16 +260,16 @@ class ServiceResponseView(APIView):
                          responses={200: ServiceResponseSerializer(many=True)})
     def get(self, request):
         if request.user:
-            provider = ProviderModel.objects.filter(UserID=request.user).first()
+            provider = ProviderModel.objects.filter(userID=request.user).first()
             if provider:
-                response_objs = ServiceResponse.objects.filter(ServiceRequestID__ProviderServiceID__ProviderID=provider)
+                response_objs = ServiceResponse.objects.filter(serviceRequestID__providerServiceID__providerID=provider)
 
                 return Response(ServiceResponseSerializer(response_objs, many=True).data, status.HTTP_200_OK)
             else:
-                return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+                return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
         else:
-            return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
     @swagger_auto_schema(tags=["Services Requests"],
                          operation_description="Service Response Endpoint <br> Authorized Users only",
@@ -266,7 +280,7 @@ class ServiceResponseView(APIView):
         serializer = CreateServiceResponseSerializer(data=data)
         if serializer.is_valid():
             response_obj = ServiceResponse(
-                ServiceRequestID_id=data["ServiceRequestID"], ResponseText=data["ResponseText"]
+                serviceRequestID_id=data["serviceRequestID"], responseText=data["responseText"]
             )
             response_obj.save()
 
@@ -283,11 +297,11 @@ class ServiceResponseView(APIView):
 @permission_classes([permissions.IsAuthenticated])
 def getResponseByUser(request):
     if request.user:
-        responses = ServiceResponse.objects.filter(ServiceRequestID__UserID=request.user)
+        responses = ServiceResponse.objects.filter(serviceRequestID__UserID=request.user)
 
         return Response(ServiceResponseSerializer(responses, many=True).data, status.HTTP_200_OK)
     else:
-        return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
 
 
 @swagger_auto_schema(
@@ -300,10 +314,10 @@ def getResponsesByProvider(request):
     if request.user:
         provider = ProviderModel.objects.filter(request.user).first()
         if provider:
-            responses = ServiceResponse.objects.filter(ServiceRequestID__ProviderServiceID__ProviderID=provider)
+            responses = ServiceResponse.objects.filter(serviceRequestID__providerServiceID__providerID=provider)
 
             return Response(ServiceResponseSerializer(responses, many=True).data, status.HTTP_200_OK)
         else:
-            return Response({"Error": "provider not found"}, status.HTTP_404_NOT_FOUND)
+            return Response({"error": "provider not found"}, status.HTTP_404_NOT_FOUND)
     else:
-        return Response({"Error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)
+        return Response({"error": "User is unauthorized"}, status.HTTP_401_UNAUTHORIZED)

@@ -1,7 +1,7 @@
 import pytest
 
 from users.models import CustomUser, Gender
-from locations.models import CountyModel, TownsModel
+from locations.models import CountyModel
 
 
 @pytest.fixture()
@@ -24,5 +24,4 @@ def user():
 @pytest.fixture()
 def location():
     county = CountyModel.objects.create(Name='Nakuru')
-    town = TownsModel.objects.create(Name='Kabarak', County_id=county.id)
-    return town
+    return county

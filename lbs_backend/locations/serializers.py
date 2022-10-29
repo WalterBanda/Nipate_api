@@ -6,7 +6,7 @@ from .models import CountyModel, CenterLocation
 class CountyModelSerializers(ModelSerializer):
     class Meta:
         model = CountyModel
-        fields = ["id", "Name"]
+        fields = ["id", "name"]
 
 
 class CenterLocationSerializer(ModelSerializer):

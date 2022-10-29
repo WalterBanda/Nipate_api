@@ -23,13 +23,13 @@ class ServiceCategorySerailizer(ModelSerializer):
 class ServiceSerializer(ModelSerializer):
     class Meta:
         model = Service
-        fields = ["id", "Name", "CategoryID"]
+        fields = ["id", "name", "categoryID"]
 
 
 class InverseServiceSerializer(ModelSerializer):
     class Meta:
         model = Service
-        fields = ["id", "Name"]
+        fields = ["id", "name"]
 
 
 class InverseCategorySerializer(ModelSerializer):
@@ -37,27 +37,28 @@ class InverseCategorySerializer(ModelSerializer):
 
     class Meta:
         model = ServiceCategory
-        fields = ["id", "Name", "services"]
+        fields = ["id", "name", "services"]
 
 
 class AdvertisementSerializer(ModelSerializer):
-    User = UserModelSerializer(source="UserID", read_only=True, many=False)
-    Location = CountyModelSerializers(source="LocationID", read_only=True, many=False)
-    Service = InverseServiceSerializer(source="ServiceID", read_only=True, many=False)
+    from provider.serializers import ProviderSerializer
+    provider = ProviderSerializer(source="providerID", read_only=True, many=False)
+    location = CountyModelSerializers(source="locationID", read_only=True, many=False)
+    service = InverseServiceSerializer(source="serviceID", read_only=True, many=True)
 
     class Meta:
         model = Advertisement
         fields = [
-            "id", "ADTitle", "User", "Service", "Location", "AdDescription", "StartDate", "ExpiryDate",
-            "NoOfMessages"
+            "id", "title", "provider", "service", "location", "description", "startDate", "expiryDate",
+            "noOfMessages"
         ]
 
 
 class CreateAdvertSerializer(Serializer):
-    ADTitle = serializers.CharField()
-    UserID = serializers.IntegerField()
-    ServiceID = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
-    LocationID = serializers.IntegerField()
-    AdDescription = serializers.CharField(allow_blank=True)
-    StartDate = serializers.DateField(allow_null=True)
-    ExpiryDate = serializers.DateField()
+    title = serializers.CharField()
+    providerID = serializers.IntegerField()
+    serviceID = serializers.ListField(child=serializers.IntegerField(), allow_empty=True)
+    locationID = serializers.IntegerField()
+    description = serializers.CharField(allow_blank=True)
+    startDate = serializers.DateField(allow_null=True)
+    expiryDate = serializers.DateField()

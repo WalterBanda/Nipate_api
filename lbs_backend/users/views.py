@@ -37,9 +37,9 @@ class UserRegister(APIView):
         if data:
             validate = userDetailsValidationSerializer(data=data)
             if validate.is_valid():
-                valid_number = User.objects.filter(MobileNumber=data['MobileNumber'])
+                valid_number = User.objects.filter(MobileNumber=data['mobileNumber'])
                 if valid_number:
-                    return Response({'Error': 'User with number already exist'}, status.HTTP_400_BAD_REQUEST)
+                    return Response({'error': 'User with number already exist'}, status.HTTP_400_BAD_REQUEST)
 
                 user = User(**data)
                 user.save()
@@ -48,7 +48,7 @@ class UserRegister(APIView):
             else:
                 return Response(validate.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response({'Error': 'please post required data'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'please post required data'}, status=status.HTTP_400_BAD_REQUEST)
 
     @swagger_auto_schema(
         tags=['User'],
@@ -60,23 +60,23 @@ class UserRegister(APIView):
         data = request.data
         validate = userPutDetailSerializer(data=data)
         if validate.is_valid():
-            user = User.objects.filter(id=data['UserID']).first()
+            user = User.objects.filter(id=data['userID']).first()
             print(user)
             if user:
-                user.GenderID_id = data['GenderID']
-                user.LocationID_id = data['LocationID']
+                user.genderID_id = data['genderID']
+                user.locationID_id = data['locationID']
                 user.set_password(data['password'])
                 user.save()
                 token, _ = Token.objects.get_or_create(user=user)
 
                 results = LoginResponseSerializer({
-                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
-                    "Auth_token": 'Token ' + token.key
+                    "mobileNumber": user.mobileNumber, "firstName": user.firstName, "lastName": user.surName,
+                    "auth_token": 'Token ' + token.key
                 }, many=False)
 
                 return Response(results.data, status=status.HTTP_201_CREATED)
             else:
-                return Response({'Error': "User doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': "User doesn't exists"}, status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response(validate.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -85,13 +85,13 @@ class UserRegister(APIView):
 
 
 def postUserLogin(data):
-    user = User.objects.filter(MobileNumber=data["MobileNumber"]).first()
+    user = User.objects.filter(MobileNumber=data["mobileNumber"]).first()
 
     if user:
         if user.check_password(data["password"]):
             return user
         else:
-            return {"error": ["Invalid user creditentials"]}
+            return {"error": ["Invalid user credentials"]}
     else:
         return {"error": ["User not found"]}
 
@@ -110,8 +110,8 @@ class LoginJwtToken(APIView):
             try:
                 token, _ = Token.objects.get_or_create(user_id=user.id)
                 results = LoginResponseSerializer({
-                    "MobileNumber": user.MobileNumber, "FirstName": user.FirstName, "LastName": user.SurName,
-                    "Auth_token": 'Token ' + token.key
+                    "mobileNumber": user.mobileNumber, "firstName": user.firstName, "lastName": user.surName,
+                    "auth_token": 'Token ' + token.key
                 }, many=False)
                 return Response(results.data, status.HTTP_200_OK)
 
@@ -132,7 +132,7 @@ class LogOutJwtToken(APIView):
     def post(self, request):
         print(request.user)
         request.user.auth_token.delete()
-        return Response({"User": "succesfully log out"}, status.HTTP_200_OK)
+        return Response({"user": "succesfully log out"}, status.HTTP_200_OK)
 
 
 # Request User details
@@ -148,7 +148,7 @@ class FetchUserDetail(APIView):
         if request.user:
             return Response(AllDetailSerializer(request.user, many=False).data, status.HTTP_200_OK)
         else:
-            return Response({"Error": "User not Authenticated"}, status.HTTP_401_UNAUTHORIZED)
+            return Response({"error": "User not Authenticated"}, status.HTTP_401_UNAUTHORIZED)
 
 
 class ConfirmUser(APIView):
@@ -156,15 +156,15 @@ class ConfirmUser(APIView):
     @swagger_auto_schema(tags=['User'],
                          operation_description="Confirm If User Credentials is Valid",
                          responses={
-                             200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"User": True}])
+                             200: openapi.Schema(type=openapi.TYPE_BOOLEAN, enum=[{"user": True}])
                          }
                          )
     def get(self, request):
         if request.user:
             token = Token.objects.filter(user=request.user).first()
             if token:
-                return Response({"User": True}, status.HTTP_200_OK)
+                return Response({"user": True}, status.HTTP_200_OK)
             else:
-                return Response({"User": False}, status.HTTP_404_NOT_FOUND)
+                return Response({"user": False}, status.HTTP_404_NOT_FOUND)
         else:
-            return Response({"User": False}, status.HTTP_404_NOT_FOUND)
+            return Response({"user": False}, status.HTTP_404_NOT_FOUND)
