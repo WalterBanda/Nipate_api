@@ -37,7 +37,8 @@ class UserRegister(APIView):
         if data:
             validate = userDetailsValidationSerializer(data=data)
             if validate.is_valid():
-                valid_number = User.objects.filter(MobileNumber=data['mobileNumber'])
+                valid_number = User.objects.filter(
+                    mobileNumber=data['mobileNumber'])
                 if valid_number:
                     return Response({'error': 'User with number already exist'}, status.HTTP_400_BAD_REQUEST)
 
@@ -85,7 +86,7 @@ class UserRegister(APIView):
 
 
 def postUserLogin(data):
-    user = User.objects.filter(MobileNumber=data["mobileNumber"]).first()
+    user = User.objects.filter(mobileNumber=data["mobileNumber"]).first()
 
     if user:
         if user.check_password(data["password"]):
